@@ -168,6 +168,24 @@
     <h1 style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;margin-bottom:8px">問題回報公告欄</h1>
     <p style="color:var(--text2);font-size:14px">所有回報均為匿名提交，管理員會盡快處理並更新狀態。</p>
   </div>
+  <div style="margin-bottom:32px">
+    <button onclick="showPage('report')" style="
+      display:flex;align-items:center;justify-content:center;gap:12px;
+      width:100%;padding:22px;border-radius:12px;border:none;cursor:pointer;
+      background:linear-gradient(135deg,#1f6feb,#388bfd);
+      color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:18px;font-weight:700;
+      box-shadow:0 4px 24px rgba(88,166,255,0.3);
+      transition:all .2s;
+    " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 32px rgba(88,166,255,0.45)'"
+       onmouseout="this.style.transform='';this.style.boxShadow='0 4px 24px rgba(88,166,255,0.3)'">
+      <span style="font-size:26px">📝</span>
+      <div style="text-align:left">
+        <div>提交問題回報</div>
+        <div style="font-size:13px;font-weight:400;opacity:0.85;margin-top:2px">點此匿名回報問題，管理員將盡快處理</div>
+      </div>
+      <span style="margin-left:auto;font-size:20px;opacity:0.8">→</span>
+    </button>
+  </div>
   <div class="stat-row" id="home-stats"></div>
   <div class="tabs">
     <button class="tab active" id="tab-pending" onclick="setHomeTab('pending')">待處理 <span id="cnt-pending" style="margin-left:6px;padding:1px 7px;border-radius:10px;font-size:11px;background:rgba(210,153,34,.15);color:var(--orange)">0</span></button>
@@ -177,7 +195,7 @@
     <input type="text" id="home-search" placeholder="搜尋回報內容…" oninput="renderHome()">
     <select id="home-cat" onchange="renderHome()">
       <option value="">所有分類</option>
-      <option>設備故障</option><option>環境問題</option><option>安全疑慮</option><option>服務問題</option><option>其他</option><option>希望功能新增</option>
+      <option>設備故障</option><option>環境問題</option><option>安全疑慮</option><option>服務問題</option><option>希望功能新增</option><option>其他</option>
     </select>
   </div>
   <div id="home-list"></div>
@@ -198,8 +216,8 @@
         <div class="cat-pill" onclick="selectCat(this)" data-val="環境問題">環境問題</div>
         <div class="cat-pill" onclick="selectCat(this)" data-val="安全疑慮">安全疑慮</div>
         <div class="cat-pill" onclick="selectCat(this)" data-val="服務問題">服務問題</div>
-        <div class="cat-pill" onclick="selectCat(this)" data-val="其他">其他</div>
         <div class="cat-pill" onclick="selectCat(this)" data-val="希望功能新增">希望功能新增</div>
+        <div class="cat-pill" onclick="selectCat(this)" data-val="其他">其他</div>
       </div>
     </div>
     <div class="form-group">
