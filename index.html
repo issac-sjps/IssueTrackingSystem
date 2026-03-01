@@ -177,7 +177,7 @@
     <input type="text" id="home-search" placeholder="搜尋回報內容…" oninput="renderHome()">
     <select id="home-cat" onchange="renderHome()">
       <option value="">所有分類</option>
-      <option>設備故障</option><option>環境問題</option><option>安全疑慮</option><option>服務問題</option><option>其他</option>
+      <option>設備故障</option><option>環境問題</option><option>安全疑慮</option><option>服務問題</option><option>其他</option><option>希望功能新增</option>
     </select>
   </div>
   <div id="home-list"></div>
@@ -190,8 +190,6 @@
     <p style="color:var(--text2);font-size:14px">所有回報均為匿名，請詳細描述問題以便管理員快速處理。</p>
   </div>
   <div style="padding:11px 16px;margin-bottom:22px;background:rgba(88,166,255,.06);border:1px solid rgba(88,166,255,.2);border-radius:var(--radius-sm);font-size:13px;color:var(--accent)">
-    🔒 本系統不收集個人身份資訊，僅記錄 IP 防止濫用（不對外公開）
-  </div>
   <div class="card" style="max-width:620px" id="report-form-wrap">
     <div class="form-group">
       <label>問題分類 *</label>
@@ -201,6 +199,7 @@
         <div class="cat-pill" onclick="selectCat(this)" data-val="安全疑慮">安全疑慮</div>
         <div class="cat-pill" onclick="selectCat(this)" data-val="服務問題">服務問題</div>
         <div class="cat-pill" onclick="selectCat(this)" data-val="其他">其他</div>
+        <div class="cat-pill" onclick="selectCat(this)" data-val="希望功能新增">希望功能新增</div>
       </div>
     </div>
     <div class="form-group">
@@ -297,7 +296,7 @@
     messagingSenderId: "118575131425",
     appId: "1:118575131425:web:aeaf8c012b39d6cf5aac60"
   };
-  const ADMIN_UID = "YOUR_GOOGLE_UID"; // ⚠️ 登入後到 Firebase Console → Authentication → Users 複製你的 UID
+  const ADMIN_UID = "29jaYh59NjduBJWsDbGCy9fPdm12"; // ⚠️ 登入後到 Firebase Console → Authentication → Users 複製你的 UID
 
   // EmailJS（選填，不填就不會發 Email 通知）
   const EMAILJS_SERVICE  = "";   // 例如 "service_abc123"
