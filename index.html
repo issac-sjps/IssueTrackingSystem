@@ -628,8 +628,38 @@
   function reportCardHTML(r, i, isAdminMode) {
     const time = fmtDate(r.createdAt);
     const onclick = isAdminMode ? `onclick="selectReport('${r.id}')"` : `onclick="toggleCard('${r.id}')"`;
+
+    // 已解決的前台卡片：左右分割顯示，不需要點展開
+    if (!isAdminMode && r.status === 'resolved') {
+      return `
+      <div class="report-card fade-in" id="card-${r.id}" style="animation-delay:${i*0.04}s;cursor:default">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <!-- 左：問題 -->
+          <div>
+            <div class="report-meta" style="margin-bottom:6px">
+              <span class="badge badge-resolved">✅ 已解決</span>
+              <span style="font-size:11px;color:var(--text3);background:var(--bg3);padding:2px 9px;border-radius:10px;margin-left:6px">${r.category}</span>
+            </div>
+            <div class="report-title" style="margin-bottom:6px">${r.title}</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.7;white-space:pre-wrap">${r.description}</div>
+            <div class="report-time" style="margin-top:8px">${time}</div>
+          </div>
+          <!-- 右：管理員回覆 -->
+          <div style="border-left:1px solid var(--border);padding-left:16px">
+            ${r.adminReply ? `
+            <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:8px">✅ 管理員回覆</div>
+            <div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">${r.adminReply}</div>
+            ${r.resolvedAt ? `<div style="font-size:11px;color:var(--text3);margin-top:10px">解決時間：${fmtDate(r.resolvedAt)}</div>` : ''}
+            ` : `<div style="font-size:13px;color:var(--text3)">（尚無回覆）</div>`}
+          </div>
+        </div>
+      </div>`;
+    }
+
+    // 待處理前台卡片：點擊展開
+    const onclick2 = isAdminMode ? `onclick="selectReport('${r.id}')"` : `onclick="toggleCard('${r.id}')"`;
     return `
-      <div class="report-card fade-in" id="card-${r.id}" ${onclick} style="animation-delay:${i*0.04}s">
+      <div class="report-card fade-in" id="card-${r.id}" ${onclick2} style="animation-delay:${i*0.04}s">
         <div class="report-card-header">
           <div style="flex:1;min-width:0">
             <div class="report-meta">
@@ -647,12 +677,6 @@
         ${!isAdminMode ? `
         <div class="report-body hidden" id="body-${r.id}">
           <div class="report-desc">${r.description}</div>
-          ${r.adminReply ? `
-          <div class="admin-reply-box">
-            <div class="admin-reply-label">✅ 管理員回覆</div>
-            <div class="admin-reply-text">${r.adminReply}</div>
-            ${r.resolvedAt ? `<div style="font-size:11px;color:var(--text3);margin-top:8px">解決時間：${fmtDate(r.resolvedAt)}</div>` : ''}
-          </div>` : ''}
         </div>` : ''}
       </div>`;
   }
