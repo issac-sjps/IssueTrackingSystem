@@ -1,0 +1,119 @@
+/* src/index.css */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0f14;
+  --bg2: #13161e;
+  --bg3: #1a1e2a;
+  --border: #252a38;
+  --border2: #303650;
+  --text: #e8eaf2;
+  --text2: #8b90a8;
+  --text3: #555c78;
+  --accent: #4f8cff;
+  --accent2: #3a6fd8;
+  --green: #2ecc71;
+  --green2: #27ae60;
+  --orange: #f39c12;
+  --red: #e74c3c;
+  --font-body: 'Noto Sans TC', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ── 通用元件 ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 18px; border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s; border: none; outline: none;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(79,140,255,0.3); }
+.btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--bg3); color: var(--text); border-color: var(--border2); }
+.btn-danger { background: var(--red); color: #fff; }
+.btn-success { background: var(--green); color: #fff; }
+.btn-success:hover { background: var(--green2); transform: translateY(-1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500;
+}
+.badge-pending { background: rgba(243,156,18,0.12); color: var(--orange); border: 1px solid rgba(243,156,18,0.25); }
+.badge-resolved { background: rgba(46,204,113,0.12); color: var(--green); border: 1px solid rgba(46,204,113,0.25); }
+
+.input, .textarea, .select {
+  width: 100%; padding: 10px 14px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text); border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 14px;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.input:focus, .textarea:focus, .select:focus { border-color: var(--accent); }
+.textarea { resize: vertical; min-height: 100px; }
+.select option { background: var(--bg3); }
+
+label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 6px; font-weight: 500; }
+
+.form-group { margin-bottom: 16px; }
+
+/* ── 動畫 ── */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.fade-in { animation: fadeIn 0.35s ease forwards; }
+
+.spinner {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--border2); border-top-color: var(--accent);
+  animation: spin 0.7s linear infinite;
+}
+
+/* ── 頁面容器 ── */
+.page { max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
+.page-wide { max-width: 1200px; margin: 0 auto; padding: 0 24px 60px; }
+
+/* ── 分隔線 ── */
+hr { border: none; border-top: 1px solid var(--border); }
+
+/* ── Toast 通知 ── */
+.toast-wrap {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.toast {
+  padding: 12px 18px; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 500; min-width: 220px;
+  box-shadow: var(--shadow); animation: fadeIn 0.3s ease;
+}
+.toast-success { background: #1a3a28; color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+.toast-error   { background: #3a1a1a; color: var(--red);   border: 1px solid rgba(231,76,60,0.3); }

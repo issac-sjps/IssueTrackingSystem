@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /reports/{reportId} {
+      allow create: if true;
+      allow read: if true;
+      // ⚠️ 同樣需要填入你的 UID
+      allow update, delete: if request.auth != null &&
+                               request.auth.uid == 'YOUR_GOOGLE_UID';
+    }
+  }
+}
