@@ -318,7 +318,7 @@
     messagingSenderId: "118575131425",
     appId: "1:118575131425:web:aeaf8c012b39d6cf5aac60"
   };
-  const ADMIN_UID = "29jaYh59NjduBJWsDbGCy9fPdm12"; // ⚠️ 登入後到 Firebase Console → Authentication → Users 複製你的 UID
+  const ADMIN_EMAIL = "issac@sjps.kh.edu.tw";
 
   // EmailJS（選填，不填就不會發 Email 通知）
   const EMAILJS_SERVICE  = "";   // 例如 "service_abc123"
@@ -353,7 +353,7 @@
     return d.toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
   }
 
-  function isAdmin() { return currentUser && currentUser.uid === ADMIN_UID; }
+  function isAdmin() { return currentUser && currentUser.email === ADMIN_EMAIL; }
 
   // ── PAGES ────────────────────────────────
   window.showPage = function(name) {
