@@ -156,6 +156,7 @@
       <button class="nav-btn active" id="nav-home" onclick="showPage('home')">首頁</button>
       <button class="nav-btn" id="nav-report" onclick="showPage('report')">提交回報</button>
       <button class="nav-btn hidden" id="nav-admin" onclick="showPage('admin')">後台</button>
+      <button class="nav-btn hidden" id="nav-analytics" onclick="showPage('analytics')">📊 數據分析</button>
       <button class="nav-btn hidden" id="nav-logout" onclick="doLogout()">登出</button>
       <button class="nav-btn" id="nav-login" onclick="doLogin()" style="font-size:12px;color:var(--text3)">管理員</button>
     </div>
@@ -298,6 +299,21 @@
   </div>
 </div>
 
+
+<!-- ══════════════ ANALYTICS PAGE ══════════════ -->
+<div id="page-analytics" class="page hidden" style="display:none;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px">
+    <div>
+      <h1 style="font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600">數據分析中心</h1>
+      <p style="color:var(--text3);font-size:12px;margin-top:3px">使用者行為與回報來源分析</p>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="loadAnalytics()">🔄 刷新</button>
+  </div>
+  <div id="analytics-content">
+    <div style="text-align:center;padding:60px"><div class="spinner" style="width:28px;height:28px;border-width:3px;margin:0 auto"></div></div>
+  </div>
+</div>
+
 <!-- ══════════════ FIREBASE + APP SCRIPT ══════════════ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
@@ -356,7 +372,7 @@
 
   // ── PAGES ────────────────────────────────
   window.showPage = function(name) {
-    ['home','report','login','admin'].forEach(p => {
+    ['home','report','login','admin','analytics'].forEach(p => {
       const el = document.getElementById('page-'+p);
       if (p === name) {
         el.classList.remove('hidden');
@@ -370,6 +386,7 @@
     });
     if (name === 'home')  loadHome();
     if (name === 'admin') loadAdmin();
+    if (name === 'analytics') loadAnalytics();
   };
 
   // ── AUTH ─────────────────────────────────
@@ -378,6 +395,7 @@
     document.getElementById('nav-login').classList.toggle('hidden', !!user);
     document.getElementById('nav-logout').classList.toggle('hidden', !user || !isAdmin());
     document.getElementById('nav-admin').classList.toggle('hidden', !isAdmin());
+    document.getElementById('nav-analytics').classList.toggle('hidden', !isAdmin());
     if (user && isAdmin()) {
       document.getElementById('login-err').style.display = 'none';
     } else if (user && !isAdmin()) {
@@ -400,17 +418,27 @@
 
   // ── IP GEO ───────────────────────────────
   async function getIpInfo() {
+    let ipv4 = '', ipv6 = '', location = { city:'未知', region:'未知', country:'未知' };
+    // 嘗試取得 IPv4
+    try {
+      const r = await fetch('https://api.ipify.org?format=json');
+      const d = await r.json();
+      ipv4 = d.ip || '';
+    } catch {}
+    // 嘗試取得 IPv6
+    try {
+      const r = await fetch('https://api6.ipify.org?format=json');
+      const d = await r.json();
+      if (d.ip && d.ip.includes(':')) ipv6 = d.ip;
+    } catch {}
+    // 取得地理位置（用 ipapi.co，支援 HTTPS）
+    const ipForGeo = ipv4 || ipv6;
     try {
       const r = await fetch('https://ipapi.co/json/');
       const d = await r.json();
-      if (d.ip) return { ip: d.ip, location: { city: d.city||'未知', region: d.region||'未知', country: d.country_name||'未知' } };
+      if (d.city) location = { city: d.city, region: d.region||'未知', country: d.country_name||'未知' };
     } catch {}
-    try {
-      const r2 = await fetch('https://api.ipify.org?format=json');
-      const d2 = await r2.json();
-      return { ip: d2.ip||'unknown', location: { city:'未知', region:'未知', country:'未知' } };
-    } catch {}
-    return { ip: 'unknown', location: { city:'未知', region:'未知', country:'未知' } };
+    return { ip: ipv4 || ipv6 || 'unknown', ipv4, ipv6, location };
   }
 
   // ── RATE LIMIT ───────────────────────────
@@ -454,7 +482,7 @@
     btn.innerHTML = '<div class="spinner"></div> 提交中…';
 
     try {
-      const { ip, location } = await getIpInfo();
+      const { ip, ipv4, ipv6, location } = await getIpInfo();
       const ok = await checkRate(ip);
       if (!ok) { toast('提交太頻繁，請稍後再試（每小時 3 次）', 'err'); btn.disabled=false; btn.textContent='📤 提交回報'; return; }
 
@@ -462,7 +490,7 @@
       await addDoc(collection(db,'reports'), {
         title, description: desc, category: selectedCat,
         url: url || '',
-        status: 'pending', ip, location,
+        status: 'pending', ip, ipv4: ipv4||'', ipv6: ipv6||'', location,
         adminReply: '', resolvedAt: null, createdAt: serverTimestamp()
       });
 
@@ -691,6 +719,193 @@
   };
 
   window.setAdminTab = function(tab) {};
+
+  // ── ANALYTICS ────────────────────────────
+  window.loadAnalytics = async function() {
+    if (!isAdmin()) return;
+    document.getElementById('analytics-content').innerHTML =
+      '<div style="text-align:center;padding:60px"><div class="spinner" style="width:28px;height:28px;border-width:3px;margin:0 auto"></div></div>';
+
+    const snap = await getDocs(collection(db,'reports'));
+    const reports = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    renderAnalytics(reports);
+  };
+
+  function renderAnalytics(reports) {
+    const total = reports.length;
+    if (total === 0) {
+      document.getElementById('analytics-content').innerHTML =
+        '<div class="empty"><div class="empty-icon">📭</div><p>還沒有足夠的資料</p></div>';
+      return;
+    }
+
+    // 國家統計
+    const countryMap = {};
+    reports.forEach(r => { const c = r.location?.country||'未知'; countryMap[c] = (countryMap[c]||0)+1; });
+    const countryTop = Object.entries(countryMap).sort((a,b)=>b[1]-a[1]);
+
+    // 地區統計
+    const regionMap = {};
+    reports.forEach(r => { const c = r.location?.region||'未知'; regionMap[c] = (regionMap[c]||0)+1; });
+    const regionTop = Object.entries(regionMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+    // 城市統計
+    const cityMap = {};
+    reports.forEach(r => { const c = r.location?.city||'未知'; cityMap[c] = (cityMap[c]||0)+1; });
+    const cityTop = Object.entries(cityMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+    // IP 類型統計
+    const hasV4 = reports.filter(r => r.ipv4).length;
+    const hasV6 = reports.filter(r => r.ipv6).length;
+    const bothV = reports.filter(r => r.ipv4 && r.ipv6).length;
+
+    // 分類統計
+    const catMap = {};
+    reports.forEach(r => { const c = r.category||'未知'; catMap[c] = (catMap[c]||0)+1; });
+    const catTop = Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
+
+    // 時段統計
+    const hourMap = Array(24).fill(0);
+    reports.forEach(r => { const ts = r.createdAt?.toDate(); if(ts) hourMap[ts.getHours()]++; });
+    const peakHour = hourMap.indexOf(Math.max(...hourMap));
+
+    // 星期統計
+    const dayMap = Array(7).fill(0);
+    const dayNames = ['日','一','二','三','四','五','六'];
+    reports.forEach(r => { const ts = r.createdAt?.toDate(); if(ts) dayMap[ts.getDay()]++; });
+
+    // 唯一 IP
+    const uniqueIPs = new Set(reports.map(r => r.ip).filter(Boolean)).size;
+
+    // 解決率
+    const resolved = reports.filter(r => r.status==='resolved').length;
+    const resolveRate = total > 0 ? Math.round(resolved/total*100) : 0;
+
+    function bar(val, max, color='var(--accent)') {
+      const pct = max > 0 ? Math.round(val/max*100) : 0;
+      return `<div style="display:flex;align-items:center;gap:10px">
+        <div style="flex:1;height:6px;background:var(--border);border-radius:3px">
+          <div style="width:${pct}%;height:100%;background:${color};border-radius:3px;transition:width .6s"></div>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2);width:30px;text-align:right">${val}</span>
+      </div>`;
+    }
+
+    function hourBar(val, max) {
+      const pct = max > 0 ? Math.round(val/max*100) : 0;
+      return `<div style="height:${Math.max(4, pct*0.6)}px;background:var(--accent);border-radius:2px 2px 0 0;opacity:${val>0?1:0.2}"></div>`;
+    }
+
+    const maxHour = Math.max(...hourMap);
+    const maxDay = Math.max(...dayMap);
+
+    document.getElementById('analytics-content').innerHTML = `
+      <!-- 總覽 -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px">
+        ${[
+          ['👥','獨立 IP 數',uniqueIPs,'var(--accent)'],
+          ['📊','總回報數',total,'var(--text)'],
+          ['✅','解決率',resolveRate+'%','var(--green)'],
+          ['⏰','回報高峰',peakHour+':00','var(--orange)'],
+          ['🌐','IPv4 記錄',hasV4,'var(--accent)'],
+          ['🔗','IPv6 記錄',hasV6,'var(--text2)'],
+        ].map(([icon,label,val,color])=>`
+          <div class="card" style="text-align:center;padding:16px">
+            <div style="font-size:22px;margin-bottom:6px">${icon}</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:${color}">${val}</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:4px">${label}</div>
+          </div>`).join('')}
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <!-- 國家分佈 -->
+        <div class="card">
+          <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🌍 國家分佈</p>
+          ${countryTop.length === 0 ? '<p style="color:var(--text3);font-size:13px">無資料</p>' :
+            countryTop.map(([name,cnt])=>`
+            <div style="margin-bottom:10px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span style="font-size:13px">${name}</span>
+                <span style="font-size:12px;color:var(--text3)">${Math.round(cnt/total*100)}%</span>
+              </div>
+              ${bar(cnt, countryTop[0][1], 'var(--accent)')}
+            </div>`).join('')}
+        </div>
+
+        <!-- 地區分佈 -->
+        <div class="card">
+          <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🗺️ 地區分佈</p>
+          ${regionTop.length === 0 ? '<p style="color:var(--text3);font-size:13px">無資料</p>' :
+            regionTop.map(([name,cnt])=>`
+            <div style="margin-bottom:10px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span style="font-size:13px">${name}</span>
+                <span style="font-size:12px;color:var(--text3)">${cnt} 筆</span>
+              </div>
+              ${bar(cnt, regionTop[0][1], 'var(--orange)')}
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <!-- 城市分佈 -->
+        <div class="card">
+          <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🏙️ 城市分佈</p>
+          ${cityTop.length === 0 ? '<p style="color:var(--text3);font-size:13px">無資料</p>' :
+            cityTop.map(([name,cnt],i)=>`
+            <div style="margin-bottom:10px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span style="font-size:13px"><span style="color:var(--text3);font-family:'IBM Plex Mono',monospace;font-size:11px;margin-right:6px">#${i+1}</span>${name}</span>
+                <span style="font-size:12px;color:var(--text3)">${cnt} 筆</span>
+              </div>
+              ${bar(cnt, cityTop[0][1], 'var(--green)')}
+            </div>`).join('')}
+        </div>
+
+        <!-- 分類分佈 -->
+        <div class="card">
+          <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🏷️ 問題分類分佈</p>
+          ${catTop.map(([name,cnt])=>`
+            <div style="margin-bottom:10px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span style="font-size:13px">${name}</span>
+                <span style="font-size:12px;color:var(--text3)">${Math.round(cnt/total*100)}%</span>
+              </div>
+              ${bar(cnt, catTop[0][1])}
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- 24小時分佈 -->
+      <div class="card" style="margin-bottom:16px">
+        <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px">⏰ 24 小時回報分佈</p>
+        <div style="display:flex;align-items:flex-end;gap:3px;height:60px">
+          ${hourMap.map((v,h)=>`
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px" title="${h}:00 - ${v}筆">
+              ${hourBar(v, maxHour)}
+            </div>`).join('')}
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          ${[0,3,6,9,12,15,18,21].map(h=>`<span style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace">${h}:00</span>`).join('')}
+        </div>
+      </div>
+
+      <!-- 星期分佈 -->
+      <div class="card">
+        <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px">📅 星期回報分佈</p>
+        <div style="display:flex;gap:8px">
+          ${dayMap.map((v,i)=>`
+            <div style="flex:1;text-align:center">
+              <div style="font-size:12px;color:var(--text3);margin-bottom:8px">週${dayNames[i]}</div>
+              <div style="height:60px;background:var(--bg3);border-radius:4px;display:flex;align-items:flex-end;overflow:hidden">
+                <div style="width:100%;height:${maxDay>0?Math.max(4,Math.round(v/maxDay*100))+'%':'4px'};background:${v===maxDay&&maxDay>0?'var(--accent)':'var(--border2)'};border-radius:2px;transition:height .6s"></div>
+              </div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2);margin-top:6px">${v}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    `;
+  }
 </script>
 </body>
 </html>
