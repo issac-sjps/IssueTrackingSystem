@@ -1,16 +1,656 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>問題回報系統</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>問題回報系統</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080b10; --bg2: #0f1318; --bg3: #161b22;
+      --border: #21262d; --border2: #30363d;
+      --text: #e6edf3; --text2: #8b949e; --text3: #484f58;
+      --accent: #58a6ff; --accent2: #1f6feb;
+      --green: #3fb950; --orange: #d29922; --red: #f85149;
+      --radius: 10px; --radius-sm: 6px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+    ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+    /* NAV */
+    nav { background: rgba(8,11,16,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); }
+    .nav-links { display: flex; gap: 4px; align-items: center; }
+    .nav-btn { background: none; border: none; padding: 6px 14px; border-radius: var(--radius-sm); color: var(--text2); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; cursor: pointer; transition: all .15s; }
+    .nav-btn:hover, .nav-btn.active { color: var(--text); background: var(--bg3); }
+    .nav-btn.active { color: var(--accent); }
+
+    /* LAYOUT */
+    .page { max-width: 960px; margin: 0 auto; padding: 40px 20px 80px; }
+    .hidden { display: none !important; }
+
+    /* CARDS */
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: var(--radius-sm); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all .2s; }
+    .btn-primary { background: var(--accent2); color: #fff; }
+    .btn-primary:hover { background: #388bfd; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(88,166,255,.25); }
+    .btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--bg3); color: var(--text); }
+    .btn-success { background: #196c2e; color: var(--green); border: 1px solid #238636; }
+    .btn-success:hover { background: #238636; }
+    .btn-danger { background: #6e151c; color: var(--red); border: 1px solid #f85149; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; }
+    .btn-sm { padding: 5px 12px; font-size: 13px; }
+
+    /* FORM */
+    .form-group { margin-bottom: 18px; }
+    label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 7px; font-weight: 500; }
+    input, textarea, select { width: 100%; padding: 10px 14px; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius-sm); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; outline: none; transition: border-color .2s; }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 110px; }
+    select option { background: var(--bg3); }
+
+    /* BADGES */
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .badge-pending { background: rgba(210,153,34,.1); color: var(--orange); border: 1px solid rgba(210,153,34,.25); }
+    .badge-resolved { background: rgba(63,185,80,.1); color: var(--green); border: 1px solid rgba(63,185,80,.25); }
+
+    /* CATEGORY PILLS */
+    .cat-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cat-pill { padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid var(--border); background: var(--bg3); color: var(--text2); transition: all .15s; }
+    .cat-pill.selected { border-color: var(--accent); background: rgba(88,166,255,.1); color: var(--accent); }
+
+    /* TABS */
+    .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+    .tab { background: none; border: none; padding: 10px 18px; font-size: 14px; font-weight: 500; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; font-family: 'Noto Sans TC', sans-serif; }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* REPORT CARD */
+    .report-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 10px; cursor: pointer; transition: border-color .15s; }
+    .report-card:hover { border-color: var(--border2); }
+    .report-card.open { border-color: var(--border2); }
+    .report-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .report-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+    .report-title { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+    .report-preview { font-size: 13px; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .report-body { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .report-desc { font-size: 14px; color: var(--text2); white-space: pre-wrap; line-height: 1.75; }
+    .admin-reply-box { margin-top: 14px; padding: 14px 16px; background: rgba(63,185,80,.05); border: 1px solid rgba(63,185,80,.2); border-radius: var(--radius-sm); }
+    .admin-reply-label { font-size: 12px; color: var(--green); font-weight: 600; margin-bottom: 6px; }
+    .admin-reply-text { font-size: 14px; white-space: pre-wrap; line-height: 1.7; }
+    .report-time { font-size: 12px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+
+    /* STAT CHIPS */
+    .stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+    .stat-chip { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 18px; display: flex; align-items: center; gap: 10px; }
+    .stat-num { font-family: 'IBM Plex Mono', monospace; font-size: 24px; font-weight: 600; }
+
+    /* ADMIN PANEL */
+    .admin-grid { display: grid; grid-template-columns: 1fr 380px; gap: 16px; }
+    .detail-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; position: sticky; top: 76px; max-height: calc(100vh - 96px); overflow-y: auto; }
+    .info-row { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: var(--text3); flex-shrink: 0; }
+    .info-val { color: var(--text); text-align: right; word-break: break-all; font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+
+    /* TOAST */
+    #toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+    .toast { padding: 11px 18px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; min-width: 200px; box-shadow: 0 4px 20px rgba(0,0,0,.5); animation: fadeUp .3s ease; }
+    .toast-ok { background: #0d2119; color: var(--green); border: 1px solid rgba(63,185,80,.3); }
+    .toast-err { background: #200d0d; color: var(--red); border: 1px solid rgba(248,81,73,.3); }
+
+    /* SPINNER */
+    .spinner { width: 18px; height: 18px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; }
+
+    /* EMPTY */
+    .empty { text-align: center; padding: 60px 20px; color: var(--text3); }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+    /* LOADER overlay */
+    #loader { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9998; transition: opacity .4s; }
+    #loader.done { opacity: 0; pointer-events: none; }
+
+    /* SEARCH */
+    .search-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+    .search-row input { flex: 1; min-width: 160px; }
+    .search-row select { width: auto; min-width: 120px; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .fade-in { animation: fadeUp .35s ease forwards; }
+
+    /* MODAL (admin login) */
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; display: flex; align-items: center; justify-content: center; }
+    .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px; width: 320px; text-align: center; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+    @media (max-width: 700px) {
+      .admin-grid { grid-template-columns: 1fr; }
+      .detail-panel { position: static; max-height: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader"><div class="spinner" style="width:32px;height:32px;border-width:3px"></div></div>
+
+<!-- TOAST -->
+<div id="toast-wrap"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="showPage('home')">
+      <div class="logo-dot"></div>
+      <span>問題回報系統</span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-btn active" id="nav-home" onclick="showPage('home')">首頁</button>
+      <button class="nav-btn" id="nav-report" onclick="showPage('report')">提交回報</button>
+      <button class="nav-btn hidden" id="nav-admin" onclick="showPage('admin')">後台</button>
+      <button class="nav-btn hidden" id="nav-logout" onclick="doLogout()">登出</button>
+      <button class="nav-btn" id="nav-login" onclick="showPage('login')" style="font-size:12px;color:var(--text3)">管理員</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════ HOME PAGE ══════════════ -->
+<div id="page-home" class="page">
+  <div class="fade-in" style="margin-bottom:32px">
+    <h1 style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;margin-bottom:8px">問題回報公告欄</h1>
+    <p style="color:var(--text2);font-size:14px">所有回報均為匿名提交，管理員會盡快處理並更新狀態。</p>
+  </div>
+  <div class="stat-row" id="home-stats"></div>
+  <div class="tabs">
+    <button class="tab active" id="tab-pending" onclick="setHomeTab('pending')">待處理 <span id="cnt-pending" style="margin-left:6px;padding:1px 7px;border-radius:10px;font-size:11px;background:rgba(210,153,34,.15);color:var(--orange)">0</span></button>
+    <button class="tab" id="tab-resolved" onclick="setHomeTab('resolved')">已解決 <span id="cnt-resolved" style="margin-left:6px;padding:1px 7px;border-radius:10px;font-size:11px;background:rgba(63,185,80,.12);color:var(--green)">0</span></button>
+  </div>
+  <div class="search-row">
+    <input type="text" id="home-search" placeholder="搜尋回報內容…" oninput="renderHome()">
+    <select id="home-cat" onchange="renderHome()">
+      <option value="">所有分類</option>
+      <option>設備故障</option><option>環境問題</option><option>安全疑慮</option><option>服務問題</option><option>其他</option>
+    </select>
+  </div>
+  <div id="home-list"></div>
+</div>
+
+<!-- ══════════════ REPORT PAGE ══════════════ -->
+<div id="page-report" class="page hidden">
+  <div style="margin-bottom:28px">
+    <h1 style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;margin-bottom:8px">提交回報</h1>
+    <p style="color:var(--text2);font-size:14px">所有回報均為匿名，請詳細描述問題以便管理員快速處理。</p>
+  </div>
+  <div style="padding:11px 16px;margin-bottom:22px;background:rgba(88,166,255,.06);border:1px solid rgba(88,166,255,.2);border-radius:var(--radius-sm);font-size:13px;color:var(--accent)">
+    🔒 本系統不收集個人身份資訊，僅記錄 IP 防止濫用（不對外公開）
+  </div>
+  <div class="card" style="max-width:620px" id="report-form-wrap">
+    <div class="form-group">
+      <label>問題分類 *</label>
+      <div class="cat-pills" id="cat-pills">
+        <div class="cat-pill" onclick="selectCat(this)" data-val="設備故障">設備故障</div>
+        <div class="cat-pill" onclick="selectCat(this)" data-val="環境問題">環境問題</div>
+        <div class="cat-pill" onclick="selectCat(this)" data-val="安全疑慮">安全疑慮</div>
+        <div class="cat-pill" onclick="selectCat(this)" data-val="服務問題">服務問題</div>
+        <div class="cat-pill" onclick="selectCat(this)" data-val="其他">其他</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>問題標題 * <span id="title-count" style="float:right;font-size:11px;color:var(--text3)">0/80</span></label>
+      <input type="text" id="r-title" maxlength="80" placeholder="簡短描述問題" oninput="document.getElementById('title-count').textContent=this.value.length+'/80'">
+    </div>
+    <div class="form-group">
+      <label>詳細說明 * <span id="desc-count" style="float:right;font-size:11px;color:var(--text3)">0/1000</span></label>
+      <textarea id="r-desc" maxlength="1000" placeholder="描述問題位置、情況、發生時間…" oninput="document.getElementById('desc-count').textContent=this.value.length+'/1000'"></textarea>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="submitReport()" id="submit-btn">📤 提交回報</button>
+  </div>
+  <div class="card hidden" id="report-done" style="max-width:620px;text-align:center;padding:48px">
+    <div style="font-size:48px;margin-bottom:16px">✅</div>
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:10px">回報已提交！</h2>
+    <p style="color:var(--text2);margin-bottom:28px;font-size:14px">感謝您的回報，管理員會盡快處理並在首頁更新狀態。</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="showPage('home')">查看所有回報</button>
+      <button class="btn btn-ghost" onclick="resetReportForm()">再次提交</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ LOGIN PAGE ══════════════ -->
+<div id="page-login" class="page hidden">
+  <div style="display:flex;justify-content:center;align-items:center;min-height:60vh">
+    <div class="card" style="width:320px;text-align:center;padding:40px">
+      <div style="font-size:36px;margin-bottom:16px">🔐</div>
+      <h2 style="font-family:'IBM Plex Mono',monospace;font-size:17px;margin-bottom:8px">管理員登入</h2>
+      <p style="color:var(--text2);font-size:13px;margin-bottom:24px">此頁面僅供系統管理員使用</p>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        使用 Google 帳號登入
+      </button>
+      <div id="login-err" style="margin-top:14px;font-size:13px;color:var(--red);display:none">⚠️ 此帳號沒有管理員權限</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN PAGE ══════════════ -->
+<div id="page-admin" class="page hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+    <div>
+      <h1 style="font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600">後台管理</h1>
+      <p style="color:var(--text3);font-size:12px;margin-top:3px">問題回報系統 · 管理員專區</p>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="loadAdmin()">🔄 刷新</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-row" id="admin-stats"></div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" id="atab-list" onclick="setAdminTab('list')">📋 回報管理 <span id="admin-pending-cnt" style="margin-left:6px;padding:1px 7px;border-radius:10px;font-size:11px;background:rgba(210,153,34,.15);color:var(--orange)">0</span></button>
+  </div>
+
+  <!-- Filter -->
+  <div class="search-row">
+    <input type="text" id="admin-search" placeholder="搜尋標題、IP、城市…" oninput="renderAdmin()">
+    <select id="admin-status" onchange="renderAdmin()">
+      <option value="">全部狀態</option>
+      <option value="pending">待處理</option>
+      <option value="resolved">已解決</option>
+    </select>
+  </div>
+
+  <div class="admin-grid">
+    <div id="admin-list"></div>
+    <div>
+      <div class="detail-panel" id="detail-panel">
+        <div class="empty" style="padding:40px 0"><div class="empty-icon">👈</div><p style="font-size:13px">點擊左側回報查看詳情</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ FIREBASE + APP SCRIPT ══════════════ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, orderBy, where, Timestamp, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+  // ══════════════════════════════════════════
+  // ⚠️ 設定區（只需改這裡）
+  // ══════════════════════════════════════════
+  const firebaseConfig = {
+    apiKey: "AIzaSyCYTcCKMuFc2pCVwYiEyFIV-8RdyC89Me8",
+    authDomain: "issuetrackingsystem-e9412.firebaseapp.com",
+    projectId: "issuetrackingsystem-e9412",
+    storageBucket: "issuetrackingsystem-e9412.firebasestorage.app",
+    messagingSenderId: "118575131425",
+    appId: "1:118575131425:web:aeaf8c012b39d6cf5aac60"
+  };
+  const ADMIN_UID = "YOUR_GOOGLE_UID"; // ⚠️ 登入後到 Firebase Console → Authentication → Users 複製你的 UID
+
+  // EmailJS（選填，不填就不會發 Email 通知）
+  const EMAILJS_SERVICE  = "";   // 例如 "service_abc123"
+  const EMAILJS_TEMPLATE = "";   // 例如 "template_xyz789"
+  const EMAILJS_KEY      = "";   // 例如 "abcDEFghiJKL"
+  // ══════════════════════════════════════════
+
+  const app  = initializeApp(firebaseConfig);
+  const db   = getFirestore(app);
+  const auth = getAuth(app);
+  const gp   = new GoogleAuthProvider();
+
+  let currentUser = null;
+  let allReports  = [];
+  let homeTab     = 'pending';
+  let selectedId  = null;
+  let selectedCat = '';
+
+  // ── UTILS ────────────────────────────────
+  function toast(msg, type='ok') {
+    const w = document.getElementById('toast-wrap');
+    const el = document.createElement('div');
+    el.className = `toast toast-${type}`;
+    el.textContent = msg;
+    w.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+
+  function fmtDate(ts) {
+    if (!ts) return '—';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleString('zh-TW', { timeZone: 'Asia/Taipei', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+  }
+
+  function isAdmin() { return currentUser && currentUser.uid === ADMIN_UID; }
+
+  // ── PAGES ────────────────────────────────
+  window.showPage = function(name) {
+    ['home','report','login','admin'].forEach(p => {
+      document.getElementById('page-'+p).classList.toggle('hidden', p !== name);
+      const nb = document.getElementById('nav-'+p);
+      if (nb) nb.classList.toggle('active', p === name);
+    });
+    if (name === 'home')  loadHome();
+    if (name === 'admin') loadAdmin();
+  };
+
+  // ── AUTH ─────────────────────────────────
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+    document.getElementById('nav-login').classList.toggle('hidden', !!user);
+    document.getElementById('nav-logout').classList.toggle('hidden', !user || !isAdmin());
+    document.getElementById('nav-admin').classList.toggle('hidden', !isAdmin());
+    if (user && isAdmin()) {
+      document.getElementById('login-err').style.display = 'none';
+    } else if (user && !isAdmin()) {
+      document.getElementById('login-err').style.display = 'block';
+    }
+    document.getElementById('loader').classList.add('done');
+    loadHome();
+  });
+
+  window.doLogin = async function() {
+    try { await signInWithPopup(auth, gp); showPage('admin'); }
+    catch(e) { if (e.code !== 'auth/popup-closed-by-user') toast('登入失敗', 'err'); }
+  };
+
+  window.doLogout = async function() {
+    await signOut(auth);
+    showPage('home');
+    toast('已登出');
+  };
+
+  // ── IP GEO ───────────────────────────────
+  async function getIpInfo() {
+    try {
+      const r = await fetch('https://ip-api.com/json/?fields=status,city,regionName,country,query&lang=zh-TW');
+      const d = await r.json();
+      if (d.status === 'success') return { ip: d.query, location: { city: d.city, region: d.regionName, country: d.country } };
+    } catch {}
+    return { ip: 'unknown', location: { city:'未知', region:'未知', country:'未知' } };
+  }
+
+  // ── RATE LIMIT ───────────────────────────
+  async function checkRate(ip) {
+    const ago = Timestamp.fromDate(new Date(Date.now() - 3600000));
+    const q = query(collection(db,'reports'), where('ip','==',ip), where('createdAt','>=',ago));
+    const s = await getDocs(q);
+    return s.size < 3;
+  }
+
+  // ── REPORT FORM ──────────────────────────
+  window.selectCat = function(el) {
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedCat = el.dataset.val;
+  };
+
+  window.resetReportForm = function() {
+    document.getElementById('r-title').value = '';
+    document.getElementById('r-desc').value  = '';
+    document.getElementById('title-count').textContent = '0/80';
+    document.getElementById('desc-count').textContent  = '0/1000';
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('selected'));
+    selectedCat = '';
+    document.getElementById('report-form-wrap').classList.remove('hidden');
+    document.getElementById('report-done').classList.add('hidden');
+  };
+
+  window.submitReport = async function() {
+    const title = document.getElementById('r-title').value.trim();
+    const desc  = document.getElementById('r-desc').value.trim();
+    if (!title || !desc || !selectedCat) { toast('請填寫所有欄位', 'err'); return; }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> 提交中…';
+
+    try {
+      const { ip, location } = await getIpInfo();
+      const ok = await checkRate(ip);
+      if (!ok) { toast('提交太頻繁，請稍後再試（每小時 3 次）', 'err'); btn.disabled=false; btn.textContent='📤 提交回報'; return; }
+
+      await addDoc(collection(db,'reports'), {
+        title, description: desc, category: selectedCat,
+        status: 'pending', ip, location,
+        adminReply: '', resolvedAt: null, createdAt: serverTimestamp()
+      });
+
+      // EmailJS
+      if (EMAILJS_SERVICE && EMAILJS_KEY) {
+        try {
+          await fetch(`https://api.emailjs.com/api/v1.0/email/send`, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ service_id: EMAILJS_SERVICE, template_id: EMAILJS_TEMPLATE, user_id: EMAILJS_KEY,
+              template_params: { report_title:title, report_category:selectedCat, report_desc:desc,
+                report_ip:ip, report_city:location.city, report_region:location.region,
+                report_time: new Date().toLocaleString('zh-TW') }})
+          });
+        } catch {}
+      }
+
+      document.getElementById('report-form-wrap').classList.add('hidden');
+      document.getElementById('report-done').classList.remove('hidden');
+      toast('回報已提交！');
+    } catch(e) {
+      console.error(e);
+      toast('提交失敗，請稍後再試', 'err');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '📤 提交回報';
+    }
+  };
+
+  // ── HOME ─────────────────────────────────
+  async function loadHome() {
+    const q = query(collection(db,'reports'), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
+    allReports = snap.docs.map(d => {
+      const data = d.data();
+      return { id:d.id, title:data.title, description:data.description, category:data.category,
+        status:data.status, adminReply:data.adminReply, resolvedAt:data.resolvedAt, createdAt:data.createdAt };
+    });
+    renderHome();
+  }
+
+  window.setHomeTab = function(tab) {
+    homeTab = tab;
+    document.getElementById('tab-pending').classList.toggle('active', tab==='pending');
+    document.getElementById('tab-resolved').classList.toggle('active', tab==='resolved');
+    renderHome();
+  };
+
+  window.renderHome = function() {
+    const search = document.getElementById('home-search').value.toLowerCase();
+    const cat    = document.getElementById('home-cat').value;
+    const pending  = allReports.filter(r => r.status==='pending').length;
+    const resolved = allReports.filter(r => r.status==='resolved').length;
+    document.getElementById('cnt-pending').textContent  = pending;
+    document.getElementById('cnt-resolved').textContent = resolved;
+    document.getElementById('home-stats').innerHTML = `
+      <div class="stat-chip"><span class="stat-num" style="color:var(--orange)">${pending}</span><span style="font-size:13px;color:var(--text2)">待處理</span></div>
+      <div class="stat-chip"><span class="stat-num" style="color:var(--green)">${resolved}</span><span style="font-size:13px;color:var(--text2)">已解決</span></div>
+      <div class="stat-chip"><span class="stat-num" style="color:var(--accent)">${allReports.length}</span><span style="font-size:13px;color:var(--text2)">總回報</span></div>`;
+
+    const list = allReports.filter(r => {
+      if (r.status !== homeTab) return false;
+      if (cat && r.category !== cat) return false;
+      if (search && !r.title.toLowerCase().includes(search) && !r.description.toLowerCase().includes(search)) return false;
+      return true;
+    });
+
+    const el = document.getElementById('home-list');
+    if (!list.length) { el.innerHTML = `<div class="empty"><div class="empty-icon">${homeTab==='pending'?'🎉':'📭'}</div><p>${homeTab==='pending'?'目前沒有待處理的回報':'還沒有已解決的回報'}</p></div>`; return; }
+    el.innerHTML = list.map((r,i) => reportCardHTML(r, i, false)).join('');
+  };
+
+  // ── ADMIN ────────────────────────────────
+  let adminReports = [];
+
+  async function loadAdmin() {
+    if (!isAdmin()) return;
+    document.getElementById('admin-list').innerHTML = '<div style="text-align:center;padding:40px"><div class="spinner" style="width:28px;height:28px;border-width:3px;margin:0 auto"></div></div>';
+    const q = query(collection(db,'reports'), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
+    adminReports = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    renderAdminStats();
+    renderAdmin();
+  }
+
+  function renderAdminStats() {
+    const now = new Date();
+    const dow = now.getDay();
+    const weekStart = new Date(now); weekStart.setDate(now.getDate() - (dow===0?6:dow-1)); weekStart.setHours(0,0,0,0);
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const thisWeek  = adminReports.filter(r => r.createdAt?.toDate() >= weekStart).length;
+    const thisMonth = adminReports.filter(r => r.createdAt?.toDate() >= monthStart).length;
+    const pending   = adminReports.filter(r => r.status==='pending').length;
+    document.getElementById('admin-pending-cnt').textContent = pending;
+    document.getElementById('admin-stats').innerHTML = `
+      <div class="stat-chip"><span class="stat-num" style="color:var(--accent)">${thisWeek}</span><span style="font-size:13px;color:var(--text2)">本週</span></div>
+      <div class="stat-chip"><span class="stat-num" style="color:var(--orange)">${thisMonth}</span><span style="font-size:13px;color:var(--text2)">本月</span></div>
+      <div class="stat-chip"><span class="stat-num" style="color:var(--text)">${adminReports.length}</span><span style="font-size:13px;color:var(--text2)">歷史總計</span></div>
+      <div class="stat-chip"><span class="stat-num" style="color:var(--orange)">${pending}</span><span style="font-size:13px;color:var(--text2)">待處理</span></div>
+      <div class="stat-chip"><span class="stat-num" style="color:var(--green)">${adminReports.filter(r=>r.status==='resolved').length}</span><span style="font-size:13px;color:var(--text2)">已解決</span></div>`;
+  }
+
+  window.renderAdmin = function() {
+    const search = document.getElementById('admin-search').value.toLowerCase();
+    const status = document.getElementById('admin-status').value;
+    const list = adminReports.filter(r => {
+      if (status && r.status !== status) return false;
+      if (search && !r.title?.toLowerCase().includes(search) && !r.ip?.includes(search) && !r.location?.city?.includes(search)) return false;
+      return true;
+    });
+    const el = document.getElementById('admin-list');
+    if (!list.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><p>沒有符合條件的回報</p></div>'; return; }
+    el.innerHTML = list.map((r,i) => reportCardHTML(r, i, true)).join('');
+  };
+
+  // ── REPORT CARD HTML ─────────────────────
+  window.toggleCard = function(id) {
+    const body = document.getElementById('body-'+id);
+    const card = document.getElementById('card-'+id);
+    if (!body) return;
+    const isOpen = !body.classList.contains('hidden');
+    body.classList.toggle('hidden', isOpen);
+    card.classList.toggle('open', !isOpen);
+  };
+
+  window.selectReport = function(id) {
+    selectedId = id;
+    const r = adminReports.find(x => x.id === id);
+    if (!r) return;
+    document.querySelectorAll('.report-card').forEach(c => c.style.borderColor='');
+    const card = document.getElementById('card-'+id);
+    if (card) card.style.borderColor = 'var(--accent)';
+    renderDetail(r);
+  };
+
+  function reportCardHTML(r, i, isAdminMode) {
+    const time = fmtDate(r.createdAt);
+    const onclick = isAdminMode ? `onclick="selectReport('${r.id}')"` : `onclick="toggleCard('${r.id}')"`;
+    return `
+      <div class="report-card fade-in" id="card-${r.id}" ${onclick} style="animation-delay:${i*0.04}s">
+        <div class="report-card-header">
+          <div style="flex:1;min-width:0">
+            <div class="report-meta">
+              <span class="badge badge-${r.status}">${r.status==='pending'?'⏳ 待處理':'✅ 已解決'}</span>
+              <span style="font-size:11px;color:var(--text3);background:var(--bg3);padding:2px 9px;border-radius:10px">${r.category}</span>
+            </div>
+            <div class="report-title">${r.title}</div>
+            <div class="report-preview" id="prev-${r.id}">${r.description}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div class="report-time">${time}</div>
+            ${!isAdminMode ? `<div style="font-size:11px;color:var(--text3);margin-top:3px">▼ 展開</div>` : ''}
+          </div>
+        </div>
+        ${!isAdminMode ? `
+        <div class="report-body hidden" id="body-${r.id}">
+          <div class="report-desc">${r.description}</div>
+          ${r.adminReply ? `
+          <div class="admin-reply-box">
+            <div class="admin-reply-label">✅ 管理員回覆</div>
+            <div class="admin-reply-text">${r.adminReply}</div>
+            ${r.resolvedAt ? `<div style="font-size:11px;color:var(--text3);margin-top:8px">解決時間：${fmtDate(r.resolvedAt)}</div>` : ''}
+          </div>` : ''}
+        </div>` : ''}
+      </div>`;
+  }
+
+  // ── DETAIL PANEL ─────────────────────────
+  function renderDetail(r) {
+    document.getElementById('detail-panel').innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h3 style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600">回報詳情</h3>
+        <button class="btn btn-ghost btn-sm" onclick="clearDetail()">✕</button>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+        <span class="badge badge-${r.status}">${r.status==='pending'?'⏳ 待處理':'✅ 已解決'}</span>
+        <span style="font-size:12px;color:var(--text3);background:var(--bg3);padding:3px 10px;border-radius:10px">${r.category}</span>
+      </div>
+      <h4 style="font-size:15px;font-weight:600;margin-bottom:8px">${r.title}</h4>
+      <p style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:16px;white-space:pre-wrap">${r.description}</p>
+      <hr>
+      <div style="margin:14px 0">
+        <p style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">回報者資訊</p>
+        <div class="info-row"><span class="info-label">IP 位址</span><span class="info-val">${r.ip||'—'}</span></div>
+        <div class="info-row"><span class="info-label">城市</span><span class="info-val">${r.location?.city||'—'}</span></div>
+        <div class="info-row"><span class="info-label">地區</span><span class="info-val">${r.location?.region||'—'}</span></div>
+        <div class="info-row"><span class="info-label">國家</span><span class="info-val">${r.location?.country||'—'}</span></div>
+        <div class="info-row"><span class="info-label">提交時間</span><span class="info-val">${fmtDate(r.createdAt)}</span></div>
+        ${r.resolvedAt ? `<div class="info-row"><span class="info-label">解決時間</span><span class="info-val">${fmtDate(r.resolvedAt)}</span></div>` : ''}
+      </div>
+      <hr>
+      <div style="margin-top:14px">
+        <p style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">管理員回覆</p>
+        <textarea id="reply-input" style="min-height:90px;margin-bottom:10px" placeholder="輸入回覆內容…">${r.adminReply||''}</textarea>
+        <div style="display:flex;gap:8px">
+          ${r.status==='pending' ? `<button class="btn btn-success" style="flex:1;justify-content:center" onclick="resolveReport('${r.id}')">✅ 標記已解決</button>` : ''}
+          <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="saveReply('${r.id}')">💾 ${r.status==='resolved'?'更新回覆':'儲存'}</button>
+        </div>
+      </div>`;
+  }
+
+  window.clearDetail = function() {
+    document.getElementById('detail-panel').innerHTML = '<div class="empty" style="padding:40px 0"><div class="empty-icon">👈</div><p style="font-size:13px">點擊左側回報查看詳情</p></div>';
+    selectedId = null;
+  };
+
+  window.resolveReport = async function(id) {
+    const reply = document.getElementById('reply-input').value.trim();
+    if (!reply) { toast('請填寫回覆內容', 'err'); return; }
+    try {
+      await updateDoc(doc(db,'reports',id), { adminReply: reply, status:'resolved', resolvedAt: serverTimestamp() });
+      toast('已標記為已解決');
+      await loadAdmin();
+      const r = adminReports.find(x => x.id === id);
+      if (r) renderDetail(r);
+    } catch { toast('操作失敗', 'err'); }
+  };
+
+  window.saveReply = async function(id) {
+    const reply = document.getElementById('reply-input').value;
+    try {
+      await updateDoc(doc(db,'reports',id), { adminReply: reply });
+      toast('回覆已儲存');
+      await loadAdmin();
+    } catch { toast('儲存失敗', 'err'); }
+  };
+
+  window.setAdminTab = function(tab) {};
+</script>
+</body>
 </html>
