@@ -210,6 +210,10 @@
       <label>詳細說明 * <span id="desc-count" style="float:right;font-size:11px;color:var(--text3)">0/1000</span></label>
       <textarea id="r-desc" maxlength="1000" placeholder="描述問題位置、情況、發生時間…" oninput="document.getElementById('desc-count').textContent=this.value.length+'/1000'"></textarea>
     </div>
+    <div class="form-group">
+      <label>需要修改的網頁 <span style="font-size:11px;color:var(--text3);margin-left:4px">（選填）</span></label>
+      <input type="text" id="r-url" placeholder="貼上網址或頁面名稱">
+    </div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="submitReport()" id="submit-btn">📤 提交回報</button>
   </div>
   <div class="card hidden" id="report-done" style="max-width:620px;text-align:center;padding:48px">
@@ -398,6 +402,7 @@
   window.resetReportForm = function() {
     document.getElementById('r-title').value = '';
     document.getElementById('r-desc').value  = '';
+    document.getElementById('r-url').value   = '';
     document.getElementById('title-count').textContent = '0/80';
     document.getElementById('desc-count').textContent  = '0/1000';
     document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('selected'));
@@ -420,8 +425,10 @@
       const ok = await checkRate(ip);
       if (!ok) { toast('提交太頻繁，請稍後再試（每小時 3 次）', 'err'); btn.disabled=false; btn.textContent='📤 提交回報'; return; }
 
+      const url = document.getElementById('r-url').value.trim();
       await addDoc(collection(db,'reports'), {
         title, description: desc, category: selectedCat,
+        url: url || '',
         status: 'pending', ip, location,
         adminReply: '', resolvedAt: null, createdAt: serverTimestamp()
       });
@@ -609,6 +616,7 @@
         <div class="info-row"><span class="info-label">城市</span><span class="info-val">${r.location?.city||'—'}</span></div>
         <div class="info-row"><span class="info-label">地區</span><span class="info-val">${r.location?.region||'—'}</span></div>
         <div class="info-row"><span class="info-label">國家</span><span class="info-val">${r.location?.country||'—'}</span></div>
+        ${r.url ? `<div class="info-row"><span class="info-label">相關網頁</span><span class="info-val" style="font-family:'Noto Sans TC',sans-serif">${r.url}</span></div>` : ''}
         <div class="info-row"><span class="info-label">提交時間</span><span class="info-val">${fmtDate(r.createdAt)}</span></div>
         ${r.resolvedAt ? `<div class="info-row"><span class="info-label">解決時間</span><span class="info-val">${fmtDate(r.resolvedAt)}</span></div>` : ''}
       </div>
