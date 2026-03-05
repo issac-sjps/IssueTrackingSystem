@@ -626,7 +626,8 @@
     allReports = snap.docs.map(d => {
       const data = d.data();
       return { id:d.id, title:data.title, description:data.description, category:data.category,
-        status:data.status, adminReply:data.adminReply, resolvedAt:data.resolvedAt, createdAt:data.createdAt };
+        status:data.status, adminReply:data.adminReply, resolvedAt:data.resolvedAt, createdAt:data.createdAt,
+        images:data.images||[], url:data.url||'' };
     });
     renderHome();
   }
@@ -743,6 +744,7 @@
             <div class="report-title" style="margin-bottom:6px">${r.title}</div>
             <div style="font-size:13px;color:var(--text2);line-height:1.7;white-space:pre-wrap">${r.description}</div>
             ${r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${r.images.map(u=>`<img src="${u}" style="max-width:120px;max-height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="window.open('${u}','_blank')">`).join('')}</div>` : ''}
+            ${r.url ? `<a href="${r.url.startsWith('http')?r.url:'https://'+r.url}" target="_blank" onclick="event.stopPropagation()" style="display:inline-block;margin-top:6px;font-size:13px;color:var(--accent);word-break:break-all">🔗 ${r.url}</a>` : ''}
             <div class="report-time" style="margin-top:8px">${time}</div>
           </div>
           <!-- 右：管理員回覆 -->
@@ -769,6 +771,7 @@
             </div>
             <div class="report-title">${r.title}</div>
             <div class="report-preview" id="prev-${r.id}">${r.description}</div>
+            ${!isAdminMode && r.url ? `<a href="${r.url.startsWith('http')?r.url:'https://'+r.url}" target="_blank" onclick="event.stopPropagation()" style="display:inline-block;margin-top:4px;font-size:13px;color:var(--accent);word-break:break-all">🔗 ${r.url}</a>` : ''}
             ${!isAdminMode && r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${r.images.map(u=>`<img src="${u}" style="max-width:120px;max-height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="event.stopPropagation();window.open('${u}','_blank')">`).join('')}</div>` : ''}
           </div>
           <div style="text-align:right;flex-shrink:0">
