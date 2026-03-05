@@ -19,8 +19,6 @@
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; font-size: 21px; line-height: 1.6; min-height: 100vh; }
     ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-
-    /* NAV */
     nav { background: rgba(8,11,16,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
     .nav-inner { max-width: 960px; margin: 0 auto; padding: 0 20px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
     .logo { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 10px; cursor: pointer; }
@@ -29,15 +27,9 @@
     .nav-btn { background: none; border: none; padding: 6px 14px; border-radius: var(--radius-sm); color: var(--text2); font-family: 'Noto Sans TC', sans-serif; font-size: 20px; cursor: pointer; transition: all .15s; }
     .nav-btn:hover, .nav-btn.active { color: var(--text); background: var(--bg3); }
     .nav-btn.active { color: var(--accent); }
-
-    /* LAYOUT */
     .page { max-width: 960px; margin: 0 auto; padding: 40px 20px 80px; }
     .hidden { display: none !important; }
-
-    /* CARDS */
     .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
-
-    /* BUTTONS */
     .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: var(--radius-sm); font-family: 'Noto Sans TC', sans-serif; font-size: 20px; font-weight: 500; cursor: pointer; border: none; transition: all .2s; }
     .btn-primary { background: var(--accent2); color: #fff; }
     .btn-primary:hover { background: #388bfd; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(88,166,255,.25); }
@@ -45,34 +37,23 @@
     .btn-ghost:hover { background: var(--bg3); color: var(--text); }
     .btn-success { background: #196c2e; color: var(--green); border: 1px solid #238636; }
     .btn-success:hover { background: #238636; }
-    .btn-danger { background: #6e151c; color: var(--red); border: 1px solid #f85149; }
     .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; }
     .btn-sm { padding: 5px 12px; font-size: 13px; }
-
-    /* FORM */
     .form-group { margin-bottom: 18px; }
     label { font-size: 19px; color: var(--text2); display: block; margin-bottom: 7px; font-weight: 500; }
     input, textarea, select { width: 100%; padding: 10px 14px; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius-sm); font-family: 'Noto Sans TC', sans-serif; font-size: 20px; outline: none; transition: border-color .2s; }
     input:focus, textarea:focus, select:focus { border-color: var(--accent); }
     textarea { resize: vertical; min-height: 110px; }
     select option { background: var(--bg3); }
-
-    /* BADGES */
     .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 20px; font-size: 18px; font-weight: 500; }
     .badge-pending { background: rgba(210,153,34,.1); color: var(--orange); border: 1px solid rgba(210,153,34,.25); }
     .badge-resolved { background: rgba(63,185,80,.1); color: var(--green); border: 1px solid rgba(63,185,80,.25); }
-
-    /* CATEGORY PILLS */
     .cat-pills { display: flex; flex-wrap: wrap; gap: 8px; }
     .cat-pill { padding: 8px 16px; border-radius: 20px; font-size: 19px; cursor: pointer; border: 1px solid var(--border); background: var(--bg3); color: var(--text2); transition: all .15s; }
     .cat-pill.selected { border-color: var(--accent); background: rgba(88,166,255,.1); color: var(--accent); }
-
-    /* TABS */
     .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
     .tab { background: none; border: none; padding: 10px 18px; font-size: 20px; font-weight: 500; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; font-family: 'Noto Sans TC', sans-serif; }
     .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-    /* REPORT CARD */
     .report-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 10px; cursor: pointer; transition: border-color .15s; }
     .report-card:hover { border-color: var(--border2); }
     .report-card.open { border-color: var(--border2); }
@@ -86,83 +67,61 @@
     .admin-reply-label { font-size: 12px; color: var(--green); font-weight: 600; margin-bottom: 6px; }
     .admin-reply-text { font-size: 20px; white-space: pre-wrap; line-height: 1.7; }
     .report-time { font-size: 12px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
-
-    /* STAT CHIPS */
     .stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
     .stat-chip { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 18px; display: flex; align-items: center; gap: 10px; }
     .stat-num { font-family: 'IBM Plex Mono', monospace; font-size: 30px; font-weight: 600; }
-
-    /* ADMIN PANEL */
     .admin-grid { display: grid; grid-template-columns: 1fr 380px; gap: 16px; }
     .detail-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; position: sticky; top: 76px; max-height: calc(100vh - 96px); overflow-y: auto; }
     .info-row { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 19px; }
     .info-row:last-child { border-bottom: none; }
     .info-label { color: var(--text3); flex-shrink: 0; }
     .info-val { color: var(--text); text-align: right; word-break: break-all; font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
-
-    /* TOAST */
     #toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
     .toast { padding: 11px 18px; border-radius: var(--radius-sm); font-size: 20px; font-weight: 500; min-width: 200px; box-shadow: 0 4px 20px rgba(0,0,0,.5); animation: fadeUp .3s ease; }
     .toast-ok { background: #0d2119; color: var(--green); border: 1px solid rgba(63,185,80,.3); }
     .toast-err { background: #200d0d; color: var(--red); border: 1px solid rgba(248,81,73,.3); }
-
-    /* SPINNER */
     .spinner { width: 18px; height: 18px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; }
-
-    /* EMPTY */
     .empty { text-align: center; padding: 60px 20px; color: var(--text3); }
     .empty-icon { font-size: 40px; margin-bottom: 12px; }
-
-    /* LOADER overlay */
     #loader { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9998; transition: opacity .4s; }
     #loader.done { opacity: 0; pointer-events: none; }
-
-    /* SEARCH */
     .search-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
     .search-row input { flex: 1; min-width: 160px; }
     .search-row select { width: auto; min-width: 120px; }
-
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .fade-in { animation: fadeUp .35s ease forwards; }
-
-    /* MODAL (admin login) */
-    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; display: flex; align-items: center; justify-content: center; }
-    .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px; width: 320px; text-align: center; }
     hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-
     /* LIGHTBOX */
     #lightbox { position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s; }
     #lightbox.open { opacity:1;pointer-events:all; }
-    #lightbox img { max-width:90vw;max-height:88vh;border-radius:10px;box-shadow:0 8px 48px rgba(0,0,0,.8);transition:transform .25s; }
-    #lightbox-close { position:fixed;top:20px;right:24px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:24px;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s; }
+    #lightbox-img { max-width:90vw;max-height:88vh;border-radius:10px;box-shadow:0 8px 48px rgba(0,0,0,.8); }
+    #lightbox-close { position:fixed;top:20px;right:24px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:24px;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center; }
     #lightbox-close:hover { background:rgba(255,255,255,.25); }
-    #lightbox-prev, #lightbox-next { position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:none;color:#fff;font-size:22px;width:48px;height:48px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s; }
+    #lightbox-prev, #lightbox-next { position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:none;color:#fff;font-size:22px;width:48px;height:48px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center; }
     #lightbox-prev { left:20px; } #lightbox-next { right:20px; }
     #lightbox-prev:hover, #lightbox-next:hover { background:rgba(255,255,255,.25); }
     #lightbox-counter { position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.6);font-family:'IBM Plex Mono',monospace;font-size:13px; }
-
-    @media (max-width: 700px) {
-      .admin-grid { grid-template-columns: 1fr; }
-      .detail-panel { position: static; max-height: none; }
-    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .fade-in { animation: fadeUp .35s ease forwards; }
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; display: flex; align-items: center; justify-content: center; }
+    @media (max-width: 700px) { .admin-grid { grid-template-columns: 1fr; } .detail-panel { position: static; max-height: none; } }
   </style>
 </head>
 <body>
-
-<!-- LOADER -->
 <div id="loader"><div class="spinner" style="width:32px;height:32px;border-width:3px"></div></div>
-
-<!-- TOAST -->
 <div id="toast-wrap"></div>
 
-<!-- NAV -->
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lightbox-close">✕</button>
+  <button id="lightbox-prev">‹</button>
+  <img id="lightbox-img" src="" alt="">
+  <button id="lightbox-next">›</button>
+  <div id="lightbox-counter"></div>
+</div>
+
 <nav>
   <div class="nav-inner">
-    <div class="logo" onclick="showPage('home')">
-      <div class="logo-dot"></div>
-      <span>問題回報系統</span>
-    </div>
+    <div class="logo" onclick="showPage('home')"><div class="logo-dot"></div><span>問題回報系統</span></div>
     <div class="nav-links">
       <button class="nav-btn active" id="nav-home" onclick="showPage('home')">首頁</button>
       <button class="nav-btn" id="nav-report" onclick="showPage('report')">提交回報</button>
@@ -174,27 +133,15 @@
   </div>
 </nav>
 
-<!-- ══════════════ HOME PAGE ══════════════ -->
 <div id="page-home" class="page">
   <div class="fade-in" style="margin-bottom:32px">
     <h1 style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;margin-bottom:8px">問題回報公告欄</h1>
     <p style="color:var(--text2);font-size:14px">所有回報均為匿名提交，管理員會盡快處理並更新狀態。</p>
   </div>
   <div style="margin-bottom:32px">
-    <button onclick="showPage('report')" style="
-      display:flex;align-items:center;justify-content:center;gap:12px;
-      width:100%;padding:22px;border-radius:12px;border:none;cursor:pointer;
-      background:linear-gradient(135deg,#1f6feb,#388bfd);
-      color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:18px;font-weight:700;
-      box-shadow:0 4px 24px rgba(88,166,255,0.3);
-      transition:all .2s;
-    " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 32px rgba(88,166,255,0.45)'"
-       onmouseout="this.style.transform='';this.style.boxShadow='0 4px 24px rgba(88,166,255,0.3)'">
+    <button onclick="showPage('report')" style="display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:22px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(135deg,#1f6feb,#388bfd);color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:18px;font-weight:700;box-shadow:0 4px 24px rgba(88,166,255,0.3);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 32px rgba(88,166,255,0.45)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 24px rgba(88,166,255,0.3)'">
       <span style="font-size:26px">📝</span>
-      <div style="text-align:left">
-        <div>提交問題回報</div>
-        <div style="font-size:13px;font-weight:400;opacity:0.85;margin-top:2px">點此匿名回報問題，管理員將盡快處理</div>
-      </div>
+      <div style="text-align:left"><div>提交問題回報</div><div style="font-size:13px;font-weight:400;opacity:0.85;margin-top:2px">點此匿名回報問題，管理員將盡快處理</div></div>
       <span style="margin-left:auto;font-size:20px;opacity:0.8">→</span>
     </button>
   </div>
@@ -213,7 +160,6 @@
   <div id="home-list"></div>
 </div>
 
-<!-- ══════════════ REPORT PAGE ══════════════ -->
 <div id="page-report" class="page hidden">
   <div style="margin-bottom:28px">
     <h1 style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;margin-bottom:8px">提交回報</h1>
@@ -245,25 +191,17 @@
     </div>
     <div class="form-group">
       <label>附上圖片 <span style="font-size:11px;color:var(--text3);margin-left:4px">（選填，可貼上或拖曳，最多 3 張）</span></label>
-      <div id="img-drop-zone" style="
-        border: 2px dashed var(--border2); border-radius: var(--radius-sm);
-        padding: 24px; text-align: center; cursor: pointer;
-        background: var(--bg3); transition: border-color .2s;
-        position: relative;
-      "
+      <div id="img-drop-zone" style="border:2px dashed var(--border2);border-radius:var(--radius-sm);padding:24px;text-align:center;cursor:pointer;background:var(--bg3);transition:border-color .2s;"
         ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
         ondragleave="this.style.borderColor='var(--border2)'"
         ondrop="handleImgDrop(event)"
-        onclick="document.getElementById('img-file-input').click()"
-      >
+        onclick="document.getElementById('img-file-input').click()">
         <div style="font-size:28px;margin-bottom:8px">🖼️</div>
         <div style="font-size:19px;color:var(--text2)">點擊選擇或拖曳圖片至此</div>
         <div style="font-size:15px;color:var(--text3);margin-top:4px">支援 JPG、PNG、GIF、WebP</div>
         <input type="file" id="img-file-input" accept="image/*" multiple style="display:none" onchange="handleImgSelect(event)">
       </div>
-      <!-- 貼上圖片提示 -->
       <div style="font-size:15px;color:var(--text3);margin-top:6px;text-align:center">或直接 Ctrl+V 貼上截圖</div>
-      <!-- 預覽區 -->
       <div id="img-preview-wrap" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"></div>
     </div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="submitReport()" id="submit-btn">📤 提交回報</button>
@@ -279,23 +217,18 @@
   </div>
 </div>
 
-<!-- ══════════════ LOGIN PAGE ══════════════ -->
 <div id="page-login" class="page hidden">
   <div style="display:flex;justify-content:center;align-items:center;min-height:60vh">
     <div class="card" style="width:320px;text-align:center;padding:40px">
       <div style="font-size:36px;margin-bottom:16px">🔐</div>
       <h2 style="font-family:'IBM Plex Mono',monospace;font-size:17px;margin-bottom:8px">管理員登入</h2>
       <p style="color:var(--text2);font-size:13px;margin-bottom:24px">此頁面僅供系統管理員使用</p>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        使用 Google 帳號登入
-      </button>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">使用 Google 帳號登入</button>
       <div id="login-err" style="margin-top:14px;font-size:13px;color:var(--red);display:none">⚠️ 此帳號沒有管理員權限</div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ ADMIN PAGE ══════════════ -->
 <div id="page-admin" class="page hidden">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
     <div>
@@ -304,16 +237,10 @@
     </div>
     <button class="btn btn-ghost btn-sm" onclick="loadAdmin()">🔄 刷新</button>
   </div>
-
-  <!-- Stats -->
   <div class="stat-row" id="admin-stats"></div>
-
-  <!-- Tabs -->
   <div class="tabs">
     <button class="tab active" id="atab-list" onclick="setAdminTab('list')">📋 回報管理 <span id="admin-pending-cnt" style="margin-left:6px;padding:1px 7px;border-radius:10px;font-size:11px;background:rgba(210,153,34,.15);color:var(--orange)">0</span></button>
   </div>
-
-  <!-- Filter -->
   <div class="search-row">
     <input type="text" id="admin-search" placeholder="搜尋標題、IP、城市…" oninput="renderAdmin()">
     <select id="admin-status" onchange="renderAdmin()">
@@ -322,20 +249,15 @@
       <option value="resolved">已解決</option>
     </select>
   </div>
-
   <div class="admin-grid">
     <div id="admin-list"></div>
-    <div>
-      <div class="detail-panel" id="detail-panel">
-        <div class="empty" style="padding:40px 0"><div class="empty-icon">👈</div><p style="font-size:13px">點擊左側回報查看詳情</p></div>
-      </div>
-    </div>
+    <div><div class="detail-panel" id="detail-panel">
+      <div class="empty" style="padding:40px 0"><div class="empty-icon">👈</div><p style="font-size:13px">點擊左側回報查看詳情</p></div>
+    </div></div>
   </div>
 </div>
 
-
-<!-- ══════════════ ANALYTICS PAGE ══════════════ -->
-<div id="page-analytics" class="page hidden" style="display:none;">
+<div id="page-analytics" class="page hidden">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px">
     <div>
       <h1 style="font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600">數據分析中心</h1>
@@ -343,21 +265,9 @@
     </div>
     <button class="btn btn-ghost btn-sm" onclick="loadAnalytics()">🔄 刷新</button>
   </div>
-  <div id="analytics-content">
-    <div style="text-align:center;padding:60px"><div class="spinner" style="width:28px;height:28px;border-width:3px;margin:0 auto"></div></div>
-  </div>
+  <div id="analytics-content"></div>
 </div>
 
-<!-- LIGHTBOX -->
-<div id="lightbox" onclick="closeLightbox(event)">
-  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
-  <button id="lightbox-prev" onclick="event.stopPropagation();lightboxNav(-1)">‹</button>
-  <img id="lightbox-img" src="" alt="">
-  <button id="lightbox-next" onclick="event.stopPropagation();lightboxNav(1)">›</button>
-  <div id="lightbox-counter"></div>
-</div>
-
-<!-- ══════════════ FIREBASE + APP SCRIPT ══════════════ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, orderBy, where, Timestamp, serverTimestamp }
@@ -365,9 +275,6 @@
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
     from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
-  // ══════════════════════════════════════════
-  // ⚠️ 設定區（只需改這裡）
-  // ══════════════════════════════════════════
   const firebaseConfig = {
     apiKey: "AIzaSyCYTcCKMuFc2pCVwYiEyFIV-8RdyC89Me8",
     authDomain: "issuetrackingsystem-e9412.firebaseapp.com",
@@ -379,25 +286,15 @@
   const ADMIN_EMAIL = "issac@sjps.kh.edu.tw";
   const CLOUDINARY_CLOUD = "myjournalweb";
   const CLOUDINARY_PRESET = "IssueTrackingSystem";
+  const EMAILJS_SERVICE = "", EMAILJS_TEMPLATE = "", EMAILJS_KEY = "";
 
-  // EmailJS（選填，不填就不會發 Email 通知）
-  const EMAILJS_SERVICE  = "";   // 例如 "service_abc123"
-  const EMAILJS_TEMPLATE = "";   // 例如 "template_xyz789"
-  const EMAILJS_KEY      = "";   // 例如 "abcDEFghiJKL"
-  // ══════════════════════════════════════════
-
-  const app  = initializeApp(firebaseConfig);
-  const db   = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
   const auth = getAuth(app);
-  const gp   = new GoogleAuthProvider();
+  const gp = new GoogleAuthProvider();
 
-  let currentUser = null;
-  let allReports  = [];
-  let homeTab     = 'pending';
-  let selectedId  = null;
-  let selectedCat = '';
+  let currentUser = null, allReports = [], homeTab = 'pending', selectedId = null, selectedCat = '';
 
-  // ── UTILS ────────────────────────────────
   function toast(msg, type='ok') {
     const w = document.getElementById('toast-wrap');
     const el = document.createElement('div');
@@ -415,21 +312,59 @@
 
   function isAdmin() { return currentUser && currentUser.email === ADMIN_EMAIL; }
 
+  // ── LIGHTBOX ─────────────────────────────
+  let lbImages = [], lbIndex = 0;
+
+  window.openLightbox = function(images, index) {
+    if (!images || !images.length) return;
+    lbImages = images;
+    lbIndex = index || 0;
+    updateLightboxUI();
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  function closeLightboxFn() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  window.lightboxNav = function(dir) {
+    lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+    updateLightboxUI();
+  };
+
+  function updateLightboxUI() {
+    document.getElementById('lightbox-img').src = lbImages[lbIndex];
+    const show = lbImages.length > 1;
+    document.getElementById('lightbox-prev').style.display = show ? 'flex' : 'none';
+    document.getElementById('lightbox-next').style.display = show ? 'flex' : 'none';
+    document.getElementById('lightbox-counter').textContent = show ? `${lbIndex+1} / ${lbImages.length}` : '';
+  }
+
+  document.getElementById('lightbox').addEventListener('click', e => {
+    if (e.target === document.getElementById('lightbox')) closeLightboxFn();
+  });
+  document.getElementById('lightbox-close').addEventListener('click', closeLightboxFn);
+  document.getElementById('lightbox-prev').addEventListener('click', e => { e.stopPropagation(); lightboxNav(-1); });
+  document.getElementById('lightbox-next').addEventListener('click', e => { e.stopPropagation(); lightboxNav(1); });
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightboxFn();
+    if (e.key === 'ArrowLeft') lightboxNav(-1);
+    if (e.key === 'ArrowRight') lightboxNav(1);
+  });
+
   // ── PAGES ────────────────────────────────
   window.showPage = function(name) {
     ['home','report','login','admin','analytics'].forEach(p => {
       const el = document.getElementById('page-'+p);
-      if (p === name) {
-        el.classList.remove('hidden');
-        el.style.display = 'block';
-      } else {
-        el.classList.add('hidden');
-        el.style.display = 'none';
-      }
+      if (p === name) { el.classList.remove('hidden'); el.style.display = 'block'; }
+      else { el.classList.add('hidden'); el.style.display = 'none'; }
       const nb = document.getElementById('nav-'+p);
       if (nb) nb.classList.toggle('active', p === name);
     });
-    if (name === 'home')  loadHome();
+    if (name === 'home') loadHome();
     if (name === 'admin') loadAdmin();
     if (name === 'analytics') loadAnalytics();
   };
@@ -441,11 +376,8 @@
     document.getElementById('nav-logout').classList.toggle('hidden', !user || !isAdmin());
     document.getElementById('nav-admin').classList.toggle('hidden', !isAdmin());
     document.getElementById('nav-analytics').classList.toggle('hidden', !isAdmin());
-    if (user && isAdmin()) {
-      document.getElementById('login-err').style.display = 'none';
-    } else if (user && !isAdmin()) {
-      document.getElementById('login-err').style.display = 'block';
-    }
+    if (user && isAdmin()) document.getElementById('login-err').style.display = 'none';
+    else if (user && !isAdmin()) document.getElementById('login-err').style.display = 'block';
     document.getElementById('loader').classList.add('done');
     loadHome();
   });
@@ -464,26 +396,10 @@
   // ── IP GEO ───────────────────────────────
   async function getIpInfo() {
     let ipv4 = '', ipv6 = '', location = { city:'未知', region:'未知', country:'未知' };
-    // 嘗試取得 IPv4
-    try {
-      const r = await fetch('https://api.ipify.org?format=json');
-      const d = await r.json();
-      ipv4 = d.ip || '';
-    } catch {}
-    // 嘗試取得 IPv6
-    try {
-      const r = await fetch('https://api6.ipify.org?format=json');
-      const d = await r.json();
-      if (d.ip && d.ip.includes(':')) ipv6 = d.ip;
-    } catch {}
-    // 取得地理位置（用 ipapi.co，支援 HTTPS）
-    const ipForGeo = ipv4 || ipv6;
-    try {
-      const r = await fetch('https://ipapi.co/json/');
-      const d = await r.json();
-      if (d.city) location = { city: d.city, region: d.region||'未知', country: d.country_name||'未知' };
-    } catch {}
-    return { ip: ipv4 || ipv6 || 'unknown', ipv4, ipv6, location };
+    try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); ipv4 = d.ip||''; } catch {}
+    try { const r = await fetch('https://api6.ipify.org?format=json'); const d = await r.json(); if (d.ip && d.ip.includes(':')) ipv6 = d.ip; } catch {}
+    try { const r = await fetch('https://ipapi.co/json/'); const d = await r.json(); if (d.city) location = { city:d.city, region:d.region||'未知', country:d.country_name||'未知' }; } catch {}
+    return { ip: ipv4||ipv6||'unknown', ipv4, ipv6, location };
   }
 
   // ── RATE LIMIT ───────────────────────────
@@ -503,10 +419,10 @@
 
   window.resetReportForm = function() {
     document.getElementById('r-title').value = '';
-    document.getElementById('r-desc').value  = '';
-    document.getElementById('r-url').value   = '';
+    document.getElementById('r-desc').value = '';
+    document.getElementById('r-url').value = '';
     document.getElementById('title-count').textContent = '0/80';
-    document.getElementById('desc-count').textContent  = '0/1000';
+    document.getElementById('desc-count').textContent = '0/1000';
     document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('selected'));
     selectedCat = '';
     pendingImages = [];
@@ -516,7 +432,7 @@
   };
 
   // ── IMAGE UPLOAD ─────────────────────────
-  let pendingImages = []; // { dataUrl, file }
+  let pendingImages = [];
 
   function updateImgPreview() {
     const wrap = document.getElementById('img-preview-wrap');
@@ -524,48 +440,31 @@
     wrap.innerHTML = pendingImages.map((img, i) => `
       <div style="position:relative;display:inline-block">
         <img src="${img.dataUrl}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid var(--border)">
-        <button onclick="removeImg(${i})" style="
-          position:absolute;top:-8px;right:-8px;width:22px;height:22px;
-          border-radius:50%;background:var(--red);border:none;color:#fff;
-          cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;
-        ">✕</button>
+        <button onclick="removeImg(${i})" style="position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:var(--red);border:none;color:#fff;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">✕</button>
       </div>`).join('');
   }
 
-  window.removeImg = function(i) {
-    pendingImages.splice(i, 1);
-    updateImgPreview();
-  };
+  window.removeImg = function(i) { pendingImages.splice(i, 1); updateImgPreview(); };
 
   function addImgFile(file) {
     if (!file.type.startsWith('image/')) return;
     if (pendingImages.length >= 3) { toast('最多只能上傳 3 張圖片', 'err'); return; }
     const reader = new FileReader();
-    reader.onload = e => {
-      pendingImages.push({ dataUrl: e.target.result, file });
-      updateImgPreview();
-    };
+    reader.onload = e => { pendingImages.push({ dataUrl: e.target.result, file }); updateImgPreview(); };
     reader.readAsDataURL(file);
   }
 
-  window.handleImgSelect = function(e) {
-    Array.from(e.target.files).forEach(addImgFile);
-    e.target.value = '';
-  };
-
+  window.handleImgSelect = function(e) { Array.from(e.target.files).forEach(addImgFile); e.target.value = ''; };
   window.handleImgDrop = function(e) {
     e.preventDefault();
     document.getElementById('img-drop-zone').style.borderColor = 'var(--border2)';
     Array.from(e.dataTransfer.files).forEach(addImgFile);
   };
 
-  // 貼上截圖
   document.addEventListener('paste', e => {
     const page = document.getElementById('page-report');
     if (page && page.style.display !== 'none') {
-      Array.from(e.clipboardData.items).forEach(item => {
-        if (item.type.startsWith('image/')) addImgFile(item.getAsFile());
-      });
+      Array.from(e.clipboardData.items).forEach(item => { if (item.type.startsWith('image/')) addImgFile(item.getAsFile()); });
     }
   });
 
@@ -575,7 +474,7 @@
       const fd = new FormData();
       fd.append('file', img.file);
       fd.append('upload_preset', CLOUDINARY_PRESET);
-      const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method:'POST', body: fd });
+      const r = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method:'POST', body:fd });
       const d = await r.json();
       if (d.secure_url) urls.push(d.secure_url);
     }
@@ -584,7 +483,7 @@
 
   window.submitReport = async function() {
     const title = document.getElementById('r-title').value.trim();
-    const desc  = document.getElementById('r-desc').value.trim();
+    const desc = document.getElementById('r-desc').value.trim();
     const missing = [];
     if (!selectedCat) missing.push('問題分類');
     if (!title) missing.push('問題標題');
@@ -598,45 +497,20 @@
     try {
       const { ip, ipv4, ipv6, location } = await getIpInfo();
       const ok = await checkRate(ip);
-      if (!ok) { toast('提交太頻繁，請稍後再試（每小時 3 次）', 'err'); btn.disabled=false; btn.textContent='📤 提交回報'; return; }
-
+      if (!ok) { toast('提交太頻繁，請稍後再試（每小時 3 次）', 'err'); btn.disabled=false; btn.innerHTML='📤 提交回報'; return; }
       const url = document.getElementById('r-url').value.trim();
-      // 上傳圖片
       let imageUrls = [];
-      if (pendingImages.length > 0) {
-        btn.innerHTML = '<div class="spinner"></div> 上傳圖片中…';
-        imageUrls = await uploadImagesToCloudinary();
-      }
+      if (pendingImages.length > 0) { btn.innerHTML = '<div class="spinner"></div> 上傳圖片中…'; imageUrls = await uploadImagesToCloudinary(); }
       await addDoc(collection(db,'reports'), {
-        title, description: desc, category: selectedCat,
-        url: url || '', images: imageUrls,
+        title, description: desc, category: selectedCat, url: url||'', images: imageUrls,
         status: 'pending', ip, ipv4: ipv4||'', ipv6: ipv6||'', location,
         adminReply: '', resolvedAt: null, createdAt: serverTimestamp()
       });
-
-      // EmailJS
-      if (EMAILJS_SERVICE && EMAILJS_KEY) {
-        try {
-          await fetch(`https://api.emailjs.com/api/v1.0/email/send`, {
-            method:'POST', headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({ service_id: EMAILJS_SERVICE, template_id: EMAILJS_TEMPLATE, user_id: EMAILJS_KEY,
-              template_params: { report_title:title, report_category:selectedCat, report_desc:desc,
-                report_ip:ip, report_city:location.city, report_region:location.region,
-                report_time: new Date().toLocaleString('zh-TW') }})
-          });
-        } catch {}
-      }
-
       document.getElementById('report-form-wrap').classList.add('hidden');
       document.getElementById('report-done').classList.remove('hidden');
       toast('回報已提交！');
-    } catch(e) {
-      console.error(e);
-      toast('提交失敗，請稍後再試', 'err');
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '📤 提交回報';
-    }
+    } catch(e) { console.error(e); toast('提交失敗，請稍後再試', 'err'); }
+    finally { btn.disabled = false; btn.innerHTML = '📤 提交回報'; }
   };
 
   // ── HOME ─────────────────────────────────
@@ -646,8 +520,8 @@
     allReports = snap.docs.map(d => {
       const data = d.data();
       return { id:d.id, title:data.title, description:data.description, category:data.category,
-        status:data.status, adminReply:data.adminReply, resolvedAt:data.resolvedAt, createdAt:data.createdAt,
-        images:data.images||[], url:data.url||'' };
+        status:data.status, adminReply:data.adminReply, resolvedAt:data.resolvedAt,
+        createdAt:data.createdAt, images:data.images||[], url:data.url||'' };
     });
     renderHome();
   }
@@ -661,23 +535,21 @@
 
   window.renderHome = function() {
     const search = document.getElementById('home-search').value.toLowerCase();
-    const cat    = document.getElementById('home-cat').value;
-    const pending  = allReports.filter(r => r.status==='pending').length;
+    const cat = document.getElementById('home-cat').value;
+    const pending = allReports.filter(r => r.status==='pending').length;
     const resolved = allReports.filter(r => r.status==='resolved').length;
-    document.getElementById('cnt-pending').textContent  = pending;
+    document.getElementById('cnt-pending').textContent = pending;
     document.getElementById('cnt-resolved').textContent = resolved;
     document.getElementById('home-stats').innerHTML = `
       <div class="stat-chip"><span class="stat-num" style="color:var(--orange)">${pending}</span><span style="font-size:13px;color:var(--text2)">待處理</span></div>
       <div class="stat-chip"><span class="stat-num" style="color:var(--green)">${resolved}</span><span style="font-size:13px;color:var(--text2)">已解決</span></div>
       <div class="stat-chip"><span class="stat-num" style="color:var(--accent)">${allReports.length}</span><span style="font-size:13px;color:var(--text2)">總回報</span></div>`;
-
     const list = allReports.filter(r => {
       if (r.status !== homeTab) return false;
       if (cat && r.category !== cat) return false;
       if (search && !r.title.toLowerCase().includes(search) && !r.description.toLowerCase().includes(search)) return false;
       return true;
     });
-
     const el = document.getElementById('home-list');
     if (!list.length) { el.innerHTML = `<div class="empty"><div class="empty-icon">${homeTab==='pending'?'🎉':'📭'}</div><p>${homeTab==='pending'?'目前沒有待處理的回報':'還沒有已解決的回報'}</p></div>`; return; }
     el.innerHTML = list.map((r,i) => reportCardHTML(r, i, false)).join('');
@@ -701,9 +573,9 @@
     const dow = now.getDay();
     const weekStart = new Date(now); weekStart.setDate(now.getDate() - (dow===0?6:dow-1)); weekStart.setHours(0,0,0,0);
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const thisWeek  = adminReports.filter(r => r.createdAt?.toDate() >= weekStart).length;
+    const thisWeek = adminReports.filter(r => r.createdAt?.toDate() >= weekStart).length;
     const thisMonth = adminReports.filter(r => r.createdAt?.toDate() >= monthStart).length;
-    const pending   = adminReports.filter(r => r.status==='pending').length;
+    const pending = adminReports.filter(r => r.status==='pending').length;
     document.getElementById('admin-pending-cnt').textContent = pending;
     document.getElementById('admin-stats').innerHTML = `
       <div class="stat-chip"><span class="stat-num" style="color:var(--accent)">${thisWeek}</span><span style="font-size:13px;color:var(--text2)">本週</span></div>
@@ -727,6 +599,22 @@
   };
 
   // ── REPORT CARD HTML ─────────────────────
+  function imgRow(images, small) {
+    if (!images || !images.length) return '';
+    const s = small ? 'max-width:120px;max-height:90px' : 'max-width:100%;max-height:160px';
+    return `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">` +
+      images.map((u, idx) =>
+        `<img src="${u}" style="${s};object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer"
+          onclick="event.stopPropagation();openLightbox(window._imgCache['${images[0]}'],${idx})">`
+      ).join('') + `</div>`;
+  }
+
+  function registerImgCache(images) {
+    if (!images || !images.length) return;
+    window._imgCache = window._imgCache || {};
+    window._imgCache[images[0]] = images;
+  }
+
   window.toggleCard = function(id) {
     const body = document.getElementById('body-'+id);
     const card = document.getElementById('card-'+id);
@@ -748,14 +636,13 @@
 
   function reportCardHTML(r, i, isAdminMode) {
     const time = fmtDate(r.createdAt);
-    const onclick = isAdminMode ? `onclick="selectReport('${r.id}')"` : `onclick="toggleCard('${r.id}')"`;
+    const images = r.images || [];
+    registerImgCache(images);
+    const urlLink = r.url ? `<a href="${r.url.startsWith('http')?r.url:'https://'+r.url}" target="_blank" onclick="event.stopPropagation()" style="display:inline-block;margin-top:4px;font-size:13px;color:var(--accent);word-break:break-all">🔗 ${r.url}</a>` : '';
 
-    // 已解決的前台卡片：左右分割顯示，不需要點展開
     if (!isAdminMode && r.status === 'resolved') {
-      return `
-      <div class="report-card fade-in" id="card-${r.id}" style="animation-delay:${i*0.04}s;cursor:default">
+      return `<div class="report-card fade-in" id="card-${r.id}" style="animation-delay:${i*0.04}s;cursor:default">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-          <!-- 左：問題 -->
           <div>
             <div class="report-meta" style="margin-bottom:6px">
               <span class="badge badge-resolved">✅ 已解決</span>
@@ -763,51 +650,47 @@
             </div>
             <div class="report-title" style="margin-bottom:6px">${r.title}</div>
             <div style="font-size:13px;color:var(--text2);line-height:1.7;white-space:pre-wrap">${r.description}</div>
-            ${r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${r.images.map((u,idx)=>`<img src="${u}" style="max-width:120px;max-height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="event.stopPropagation();openLightbox(r.images,idx)">`).join('')}</div>` : ''}
-            ${r.url ? `<a href="${r.url.startsWith('http')?r.url:'https://'+r.url}" target="_blank" onclick="event.stopPropagation()" style="display:inline-block;margin-top:6px;font-size:13px;color:var(--accent);word-break:break-all">🔗 ${r.url}</a>` : ''}
+            ${imgRow(images, true)}
+            ${urlLink}
             <div class="report-time" style="margin-top:8px">${time}</div>
           </div>
-          <!-- 右：管理員回覆 -->
           <div style="border-left:1px solid var(--border);padding-left:16px">
-            ${r.adminReply ? `
-            <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:8px">✅ 管理員回覆</div>
-            <div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">${r.adminReply}</div>
-            ${r.resolvedAt ? `<div style="font-size:11px;color:var(--text3);margin-top:10px">解決時間：${fmtDate(r.resolvedAt)}</div>` : ''}
-            ` : `<div style="font-size:13px;color:var(--text3)">（尚無回覆）</div>`}
+            ${r.adminReply
+              ? `<div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:8px">✅ 管理員回覆</div>
+                 <div style="font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap">${r.adminReply}</div>
+                 ${r.resolvedAt ? `<div style="font-size:11px;color:var(--text3);margin-top:10px">解決時間：${fmtDate(r.resolvedAt)}</div>` : ''}`
+              : `<div style="font-size:13px;color:var(--text3)">（尚無回覆）</div>`}
           </div>
         </div>
       </div>`;
     }
 
-    // 待處理前台卡片：點擊展開
-    const onclick2 = isAdminMode ? `onclick="selectReport('${r.id}')"` : `onclick="toggleCard('${r.id}')"`;
-    return `
-      <div class="report-card fade-in" id="card-${r.id}" ${onclick2} style="animation-delay:${i*0.04}s">
-        <div class="report-card-header">
-          <div style="flex:1;min-width:0">
-            <div class="report-meta">
-              <span class="badge badge-${r.status}">${r.status==='pending'?'⏳ 待處理':'✅ 已解決'}</span>
-              <span style="font-size:11px;color:var(--text3);background:var(--bg3);padding:2px 9px;border-radius:10px">${r.category}</span>
-            </div>
-            <div class="report-title">${r.title}</div>
-            <div class="report-preview" id="prev-${r.id}">${r.description}</div>
-            ${!isAdminMode && r.url ? `<a href="${r.url.startsWith('http')?r.url:'https://'+r.url}" target="_blank" onclick="event.stopPropagation()" style="display:inline-block;margin-top:4px;font-size:13px;color:var(--accent);word-break:break-all">🔗 ${r.url}</a>` : ''}
-            ${!isAdminMode && r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${r.images.map((u,idx)=>`<img src="${u}" style="max-width:120px;max-height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="event.stopPropagation();openLightbox(${JSON.stringify(r.images).replace(/'/g,\'\')},${idx})">`).join('')}</div>` : ''}
+    const onclick = isAdminMode ? `onclick="selectReport('${r.id}')"` : `onclick="toggleCard('${r.id}')"`;
+    return `<div class="report-card fade-in" id="card-${r.id}" ${onclick} style="animation-delay:${i*0.04}s">
+      <div class="report-card-header">
+        <div style="flex:1;min-width:0">
+          <div class="report-meta">
+            <span class="badge badge-${r.status}">${r.status==='pending'?'⏳ 待處理':'✅ 已解決'}</span>
+            <span style="font-size:11px;color:var(--text3);background:var(--bg3);padding:2px 9px;border-radius:10px">${r.category}</span>
           </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div class="report-time">${time}</div>
-            ${!isAdminMode ? `<div style="font-size:11px;color:var(--text3);margin-top:3px">▼ 展開</div>` : ''}
-          </div>
+          <div class="report-title">${r.title}</div>
+          <div class="report-preview" id="prev-${r.id}">${r.description}</div>
+          ${!isAdminMode ? urlLink : ''}
+          ${!isAdminMode ? imgRow(images, true) : ''}
         </div>
-        ${!isAdminMode ? `
-        <div class="report-body hidden" id="body-${r.id}">
-          <div class="report-desc">${r.description}</div>
-        </div>` : ''}
-      </div>`;
+        <div style="text-align:right;flex-shrink:0">
+          <div class="report-time">${time}</div>
+          ${!isAdminMode ? `<div style="font-size:11px;color:var(--text3);margin-top:3px">▼ 展開</div>` : ''}
+        </div>
+      </div>
+      ${!isAdminMode ? `<div class="report-body hidden" id="body-${r.id}"><div class="report-desc">${r.description}</div></div>` : ''}
+    </div>`;
   }
 
   // ── DETAIL PANEL ─────────────────────────
   function renderDetail(r) {
+    const images = r.images || [];
+    registerImgCache(images);
     document.getElementById('detail-panel').innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
         <h3 style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600">回報詳情</h3>
@@ -819,7 +702,7 @@
       </div>
       <h4 style="font-size:15px;font-weight:600;margin-bottom:8px">${r.title}</h4>
       <p style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:16px;white-space:pre-wrap">${r.description}</p>
-      ${r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">${r.images.map((u,idx)=>`<img src="${u}" style="max-width:100%;max-height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(r.images).replace(/'/g,\'\')},${idx})">`).join('')}</div>` : ''}
+      ${images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">${images.map((u,idx)=>`<img src="${u}" style="max-width:100%;max-height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(window._imgCache['${images[0]}'],${idx})">`).join('')}</div>` : ''}
       <hr>
       <div style="margin:14px 0">
         <p style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">回報者資訊</p>
@@ -829,7 +712,7 @@
         <div class="info-row"><span class="info-label">城市</span><span class="info-val">${r.location?.city||'—'}</span></div>
         <div class="info-row"><span class="info-label">地區</span><span class="info-val">${r.location?.region||'—'}</span></div>
         <div class="info-row"><span class="info-label">國家</span><span class="info-val">${r.location?.country||'—'}</span></div>
-        ${r.url ? `<div class="info-row"><span class="info-label">相關網頁</span><span class="info-val" style="font-family:'Noto Sans TC',sans-serif">${r.url}</span></div>` : ''}
+        ${r.url ? `<div class="info-row"><span class="info-label">相關網頁</span><span class="info-val"><a href="${r.url.startsWith('http')?r.url:'https://'+r.url}" target="_blank" style="color:var(--accent)">${r.url}</a></span></div>` : ''}
         <div class="info-row"><span class="info-label">提交時間</span><span class="info-val">${fmtDate(r.createdAt)}</span></div>
         ${r.resolvedAt ? `<div class="info-row"><span class="info-label">解決時間</span><span class="info-val">${fmtDate(r.resolvedAt)}</span></div>` : ''}
       </div>
@@ -863,242 +746,65 @@
 
   window.saveReply = async function(id) {
     const reply = document.getElementById('reply-input').value;
-    try {
-      await updateDoc(doc(db,'reports',id), { adminReply: reply });
-      toast('回覆已儲存');
-      await loadAdmin();
-    } catch { toast('儲存失敗', 'err'); }
+    try { await updateDoc(doc(db,'reports',id), { adminReply: reply }); toast('回覆已儲存'); await loadAdmin(); }
+    catch { toast('儲存失敗', 'err'); }
   };
 
   window.setAdminTab = function(tab) {};
 
-  // ── LIGHTBOX ─────────────────────────────
-  let lbImages = [], lbIndex = 0;
-
-  window.openLightbox = function(images, index) {
-    if (!images || !images.length) return;
-    lbImages = typeof images === 'string' ? JSON.parse(images) : images;
-    lbIndex = index || 0;
-    updateLightbox();
-    document.getElementById('lightbox').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  };
-
-  window.closeLightbox = function(e) {
-    if (e && e.target !== document.getElementById('lightbox') && e.target !== document.getElementById('lightbox-close')) return;
-    document.getElementById('lightbox').classList.remove('open');
-    document.body.style.overflow = '';
-  };
-
-  window.lightboxNav = function(dir) {
-    lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
-    updateLightbox();
-  };
-
-  function updateLightbox() {
-    document.getElementById('lightbox-img').src = lbImages[lbIndex];
-    const prev = document.getElementById('lightbox-prev');
-    const next = document.getElementById('lightbox-next');
-    prev.style.display = lbImages.length > 1 ? 'flex' : 'none';
-    next.style.display = lbImages.length > 1 ? 'flex' : 'none';
-    document.getElementById('lightbox-counter').textContent =
-      lbImages.length > 1 ? `${lbIndex + 1} / ${lbImages.length}` : '';
-  }
-
-  // 鍵盤控制
-  document.addEventListener('keydown', e => {
-    const lb = document.getElementById('lightbox');
-    if (!lb.classList.contains('open')) return;
-    if (e.key === 'Escape') closeLightbox({target: lb});
-    if (e.key === 'ArrowLeft') lightboxNav(-1);
-    if (e.key === 'ArrowRight') lightboxNav(1);
-  });
-
   // ── ANALYTICS ────────────────────────────
   window.loadAnalytics = async function() {
     if (!isAdmin()) return;
-    document.getElementById('analytics-content').innerHTML =
-      '<div style="text-align:center;padding:60px"><div class="spinner" style="width:28px;height:28px;border-width:3px;margin:0 auto"></div></div>';
-
+    document.getElementById('analytics-content').innerHTML = '<div style="text-align:center;padding:60px"><div class="spinner" style="width:28px;height:28px;border-width:3px;margin:0 auto"></div></div>';
     const snap = await getDocs(collection(db,'reports'));
-    const reports = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-    renderAnalytics(reports);
+    renderAnalytics(snap.docs.map(d => ({ id:d.id, ...d.data() })));
   };
 
   function renderAnalytics(reports) {
     const total = reports.length;
-    if (total === 0) {
-      document.getElementById('analytics-content').innerHTML =
-        '<div class="empty"><div class="empty-icon">📭</div><p>還沒有足夠的資料</p></div>';
-      return;
-    }
-
-    // 國家統計
-    const countryMap = {};
-    reports.forEach(r => { const c = r.location?.country||'未知'; countryMap[c] = (countryMap[c]||0)+1; });
-    const countryTop = Object.entries(countryMap).sort((a,b)=>b[1]-a[1]);
-
-    // 地區統計
-    const regionMap = {};
-    reports.forEach(r => { const c = r.location?.region||'未知'; regionMap[c] = (regionMap[c]||0)+1; });
-    const regionTop = Object.entries(regionMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
-
-    // 城市統計
-    const cityMap = {};
-    reports.forEach(r => { const c = r.location?.city||'未知'; cityMap[c] = (cityMap[c]||0)+1; });
-    const cityTop = Object.entries(cityMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
-
-    // IP 類型統計
-    const hasV4 = reports.filter(r => r.ipv4).length;
-    const hasV6 = reports.filter(r => r.ipv6).length;
-    const bothV = reports.filter(r => r.ipv4 && r.ipv6).length;
-
-    // 分類統計
-    const catMap = {};
-    reports.forEach(r => { const c = r.category||'未知'; catMap[c] = (catMap[c]||0)+1; });
-    const catTop = Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
-
-    // 時段統計
-    const hourMap = Array(24).fill(0);
-    reports.forEach(r => { const ts = r.createdAt?.toDate(); if(ts) hourMap[ts.getHours()]++; });
-    const peakHour = hourMap.indexOf(Math.max(...hourMap));
-
-    // 星期統計
-    const dayMap = Array(7).fill(0);
-    const dayNames = ['日','一','二','三','四','五','六'];
-    reports.forEach(r => { const ts = r.createdAt?.toDate(); if(ts) dayMap[ts.getDay()]++; });
-
-    // 唯一 IP
-    const uniqueIPs = new Set(reports.map(r => r.ip).filter(Boolean)).size;
-
-    // 解決率
-    const resolved = reports.filter(r => r.status==='resolved').length;
-    const resolveRate = total > 0 ? Math.round(resolved/total*100) : 0;
-
-    function bar(val, max, color='var(--accent)') {
-      const pct = max > 0 ? Math.round(val/max*100) : 0;
-      return `<div style="display:flex;align-items:center;gap:10px">
-        <div style="flex:1;height:6px;background:var(--border);border-radius:3px">
-          <div style="width:${pct}%;height:100%;background:${color};border-radius:3px;transition:width .6s"></div>
-        </div>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2);width:30px;text-align:right">${val}</span>
-      </div>`;
-    }
-
-    function hourBar(val, max) {
-      const pct = max > 0 ? Math.round(val/max*100) : 0;
-      return `<div style="height:${Math.max(4, pct*0.6)}px;background:var(--accent);border-radius:2px 2px 0 0;opacity:${val>0?1:0.2}"></div>`;
-    }
-
-    const maxHour = Math.max(...hourMap);
-    const maxDay = Math.max(...dayMap);
-
+    if (!total) { document.getElementById('analytics-content').innerHTML = '<div class="empty"><div class="empty-icon">📭</div><p>還沒有足夠的資料</p></div>'; return; }
+    const countryMap={}, regionMap={}, cityMap={}, catMap={};
+    const hourMap=Array(24).fill(0), dayMap=Array(7).fill(0);
+    reports.forEach(r => {
+      const c=r.location?.country||'未知', rg=r.location?.region||'未知', ct=r.location?.city||'未知', ca=r.category||'未知';
+      countryMap[c]=(countryMap[c]||0)+1; regionMap[rg]=(regionMap[rg]||0)+1;
+      cityMap[ct]=(cityMap[ct]||0)+1; catMap[ca]=(catMap[ca]||0)+1;
+      const ts=r.createdAt?.toDate(); if(ts){hourMap[ts.getHours()]++;dayMap[ts.getDay()]++;}
+    });
+    const countryTop=Object.entries(countryMap).sort((a,b)=>b[1]-a[1]);
+    const regionTop=Object.entries(regionMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    const cityTop=Object.entries(cityMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    const catTop=Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
+    const hasV4=reports.filter(r=>r.ipv4).length, hasV6=reports.filter(r=>r.ipv6).length;
+    const uniqueIPs=new Set(reports.map(r=>r.ip).filter(Boolean)).size;
+    const resolved=reports.filter(r=>r.status==='resolved').length;
+    const resolveRate=Math.round(resolved/total*100);
+    const peakHour=hourMap.indexOf(Math.max(...hourMap));
+    const maxHour=Math.max(...hourMap), maxDay=Math.max(...dayMap);
+    const dayNames=['日','一','二','三','四','五','六'];
+    function bar(val,max,color='var(--accent)'){const pct=max>0?Math.round(val/max*100):0;return`<div style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:6px;background:var(--border);border-radius:3px"><div style="width:${pct}%;height:100%;background:${color};border-radius:3px"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2);width:30px;text-align:right">${val}</span></div>`;}
     document.getElementById('analytics-content').innerHTML = `
-      <!-- 總覽 -->
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px">
-        ${[
-          ['👥','獨立 IP 數',uniqueIPs,'var(--accent)'],
-          ['📊','總回報數',total,'var(--text)'],
-          ['✅','解決率',resolveRate+'%','var(--green)'],
-          ['⏰','回報高峰',peakHour+':00','var(--orange)'],
-          ['🌐','IPv4 記錄',hasV4,'var(--accent)'],
-          ['🔗','IPv6 記錄',hasV6,'var(--text2)'],
-        ].map(([icon,label,val,color])=>`
-          <div class="card" style="text-align:center;padding:16px">
-            <div style="font-size:22px;margin-bottom:6px">${icon}</div>
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:${color}">${val}</div>
-            <div style="font-size:12px;color:var(--text3);margin-top:4px">${label}</div>
-          </div>`).join('')}
+        ${[['👥','獨立 IP 數',uniqueIPs,'var(--accent)'],['📊','總回報數',total,'var(--text)'],['✅','解決率',resolveRate+'%','var(--green)'],['⏰','回報高峰',peakHour+':00','var(--orange)'],['🌐','IPv4 記錄',hasV4,'var(--accent)'],['🔗','IPv6 記錄',hasV6,'var(--text2)']].map(([icon,label,val,color])=>`<div class="card" style="text-align:center;padding:16px"><div style="font-size:22px;margin-bottom:6px">${icon}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:${color}">${val}</div><div style="font-size:12px;color:var(--text3);margin-top:4px">${label}</div></div>`).join('')}
       </div>
-
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-        <!-- 國家分佈 -->
-        <div class="card">
-          <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🌍 國家分佈</p>
-          ${countryTop.length === 0 ? '<p style="color:var(--text3);font-size:13px">無資料</p>' :
-            countryTop.map(([name,cnt])=>`
-            <div style="margin-bottom:10px">
-              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                <span style="font-size:13px">${name}</span>
-                <span style="font-size:12px;color:var(--text3)">${Math.round(cnt/total*100)}%</span>
-              </div>
-              ${bar(cnt, countryTop[0][1], 'var(--accent)')}
-            </div>`).join('')}
-        </div>
-
-        <!-- 地區分佈 -->
-        <div class="card">
-          <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🗺️ 地區分佈</p>
-          ${regionTop.length === 0 ? '<p style="color:var(--text3);font-size:13px">無資料</p>' :
-            regionTop.map(([name,cnt])=>`
-            <div style="margin-bottom:10px">
-              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                <span style="font-size:13px">${name}</span>
-                <span style="font-size:12px;color:var(--text3)">${cnt} 筆</span>
-              </div>
-              ${bar(cnt, regionTop[0][1], 'var(--orange)')}
-            </div>`).join('')}
-        </div>
+        <div class="card"><p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🌍 國家分佈</p>${countryTop.map(([n,c])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">${n}</span><span style="font-size:12px;color:var(--text3)">${Math.round(c/total*100)}%</span></div>${bar(c,countryTop[0][1],'var(--accent)')}</div>`).join('')}</div>
+        <div class="card"><p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🗺️ 地區分佈</p>${regionTop.map(([n,c])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">${n}</span><span style="font-size:12px;color:var(--text3)">${c} 筆</span></div>${bar(c,regionTop[0][1],'var(--orange)')}</div>`).join('')}</div>
       </div>
-
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-        <!-- 城市分佈 -->
-        <div class="card">
-          <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🏙️ 城市分佈</p>
-          ${cityTop.length === 0 ? '<p style="color:var(--text3);font-size:13px">無資料</p>' :
-            cityTop.map(([name,cnt],i)=>`
-            <div style="margin-bottom:10px">
-              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                <span style="font-size:13px"><span style="color:var(--text3);font-family:'IBM Plex Mono',monospace;font-size:11px;margin-right:6px">#${i+1}</span>${name}</span>
-                <span style="font-size:12px;color:var(--text3)">${cnt} 筆</span>
-              </div>
-              ${bar(cnt, cityTop[0][1], 'var(--green)')}
-            </div>`).join('')}
-        </div>
-
-        <!-- 分類分佈 -->
-        <div class="card">
-          <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🏷️ 問題分類分佈</p>
-          ${catTop.map(([name,cnt])=>`
-            <div style="margin-bottom:10px">
-              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                <span style="font-size:13px">${name}</span>
-                <span style="font-size:12px;color:var(--text3)">${Math.round(cnt/total*100)}%</span>
-              </div>
-              ${bar(cnt, catTop[0][1])}
-            </div>`).join('')}
-        </div>
+        <div class="card"><p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🏙️ 城市分佈</p>${cityTop.map(([n,c],i)=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px"><span style="color:var(--text3);font-size:11px;margin-right:6px">#${i+1}</span>${n}</span><span style="font-size:12px;color:var(--text3)">${c} 筆</span></div>${bar(c,cityTop[0][1],'var(--green)')}</div>`).join('')}</div>
+        <div class="card"><p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🏷️ 問題分類</p>${catTop.map(([n,c])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">${n}</span><span style="font-size:12px;color:var(--text3)">${Math.round(c/total*100)}%</span></div>${bar(c,catTop[0][1])}</div>`).join('')}</div>
       </div>
-
-      <!-- 24小時分佈 -->
       <div class="card" style="margin-bottom:16px">
         <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px">⏰ 24 小時回報分佈</p>
-        <div style="display:flex;align-items:flex-end;gap:3px;height:60px">
-          ${hourMap.map((v,h)=>`
-            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px" title="${h}:00 - ${v}筆">
-              ${hourBar(v, maxHour)}
-            </div>`).join('')}
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-top:6px">
-          ${[0,3,6,9,12,15,18,21].map(h=>`<span style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace">${h}:00</span>`).join('')}
-        </div>
+        <div style="display:flex;align-items:flex-end;gap:3px;height:60px">${hourMap.map((v,h)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center" title="${h}:00 - ${v}筆"><div style="height:${maxHour>0?Math.max(4,Math.round(v/maxHour*60))+'px':'4px'};width:100%;background:var(--accent);border-radius:2px 2px 0 0;opacity:${v>0?1:0.15}"></div></div>`).join('')}</div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">${[0,3,6,9,12,15,18,21].map(h=>`<span style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace">${h}:00</span>`).join('')}</div>
       </div>
-
-      <!-- 星期分佈 -->
       <div class="card">
         <p style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px">📅 星期回報分佈</p>
-        <div style="display:flex;gap:8px">
-          ${dayMap.map((v,i)=>`
-            <div style="flex:1;text-align:center">
-              <div style="font-size:12px;color:var(--text3);margin-bottom:8px">週${dayNames[i]}</div>
-              <div style="height:60px;background:var(--bg3);border-radius:4px;display:flex;align-items:flex-end;overflow:hidden">
-                <div style="width:100%;height:${maxDay>0?Math.max(4,Math.round(v/maxDay*100))+'%':'4px'};background:${v===maxDay&&maxDay>0?'var(--accent)':'var(--border2)'};border-radius:2px;transition:height .6s"></div>
-              </div>
-              <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2);margin-top:6px">${v}</div>
-            </div>`).join('')}
+        <div style="display:flex;gap:8px">${dayMap.map((v,i)=>`<div style="flex:1;text-align:center"><div style="font-size:12px;color:var(--text3);margin-bottom:8px">週${dayNames[i]}</div><div style="height:60px;background:var(--bg3);border-radius:4px;display:flex;align-items:flex-end;overflow:hidden"><div style="width:100%;height:${maxDay>0?Math.max(4,Math.round(v/maxDay*100))+'%':'4px'};background:${v===maxDay&&maxDay>0?'var(--accent)':'var(--border2)'};border-radius:2px"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text2);margin-top:6px">${v}</div></div>`).join('')}
         </div>
-      </div>
-    `;
+      </div>`;
   }
 </script>
 </body>
