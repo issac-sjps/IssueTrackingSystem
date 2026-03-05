@@ -131,6 +131,17 @@
     .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px; width: 320px; text-align: center; }
     hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 
+    /* LIGHTBOX */
+    #lightbox { position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s; }
+    #lightbox.open { opacity:1;pointer-events:all; }
+    #lightbox img { max-width:90vw;max-height:88vh;border-radius:10px;box-shadow:0 8px 48px rgba(0,0,0,.8);transition:transform .25s; }
+    #lightbox-close { position:fixed;top:20px;right:24px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:24px;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s; }
+    #lightbox-close:hover { background:rgba(255,255,255,.25); }
+    #lightbox-prev, #lightbox-next { position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:none;color:#fff;font-size:22px;width:48px;height:48px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s; }
+    #lightbox-prev { left:20px; } #lightbox-next { right:20px; }
+    #lightbox-prev:hover, #lightbox-next:hover { background:rgba(255,255,255,.25); }
+    #lightbox-counter { position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.6);font-family:'IBM Plex Mono',monospace;font-size:13px; }
+
     @media (max-width: 700px) {
       .admin-grid { grid-template-columns: 1fr; }
       .detail-panel { position: static; max-height: none; }
@@ -335,6 +346,15 @@
   <div id="analytics-content">
     <div style="text-align:center;padding:60px"><div class="spinner" style="width:28px;height:28px;border-width:3px;margin:0 auto"></div></div>
   </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox(event)">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button id="lightbox-prev" onclick="event.stopPropagation();lightboxNav(-1)">‹</button>
+  <img id="lightbox-img" src="" alt="">
+  <button id="lightbox-next" onclick="event.stopPropagation();lightboxNav(1)">›</button>
+  <div id="lightbox-counter"></div>
 </div>
 
 <!-- ══════════════ FIREBASE + APP SCRIPT ══════════════ -->
@@ -851,6 +871,48 @@
   };
 
   window.setAdminTab = function(tab) {};
+
+  // ── LIGHTBOX ─────────────────────────────
+  let lbImages = [], lbIndex = 0;
+
+  window.openLightbox = function(images, index) {
+    if (!images || !images.length) return;
+    lbImages = typeof images === 'string' ? JSON.parse(images) : images;
+    lbIndex = index || 0;
+    updateLightbox();
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeLightbox = function(e) {
+    if (e && e.target !== document.getElementById('lightbox') && e.target !== document.getElementById('lightbox-close')) return;
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  window.lightboxNav = function(dir) {
+    lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+    updateLightbox();
+  };
+
+  function updateLightbox() {
+    document.getElementById('lightbox-img').src = lbImages[lbIndex];
+    const prev = document.getElementById('lightbox-prev');
+    const next = document.getElementById('lightbox-next');
+    prev.style.display = lbImages.length > 1 ? 'flex' : 'none';
+    next.style.display = lbImages.length > 1 ? 'flex' : 'none';
+    document.getElementById('lightbox-counter').textContent =
+      lbImages.length > 1 ? `${lbIndex + 1} / ${lbImages.length}` : '';
+  }
+
+  // 鍵盤控制
+  document.addEventListener('keydown', e => {
+    const lb = document.getElementById('lightbox');
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox({target: lb});
+    if (e.key === 'ArrowLeft') lightboxNav(-1);
+    if (e.key === 'ArrowRight') lightboxNav(1);
+  });
 
   // ── ANALYTICS ────────────────────────────
   window.loadAnalytics = async function() {
