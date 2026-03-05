@@ -769,6 +769,7 @@
             </div>
             <div class="report-title">${r.title}</div>
             <div class="report-preview" id="prev-${r.id}">${r.description}</div>
+            ${!isAdminMode && r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${r.images.map(u=>`<img src="${u}" style="max-width:120px;max-height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="event.stopPropagation();window.open('${u}','_blank')">`).join('')}</div>` : ''}
           </div>
           <div style="text-align:right;flex-shrink:0">
             <div class="report-time">${time}</div>
@@ -778,7 +779,6 @@
         ${!isAdminMode ? `
         <div class="report-body hidden" id="body-${r.id}">
           <div class="report-desc">${r.description}</div>
-          ${r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">${r.images.map(u=>`<img src="${u}" style="max-width:140px;max-height:100px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="window.open('${u}','_blank')">`).join('')}</div>` : ''}
         </div>` : ''}
       </div>`;
   }
