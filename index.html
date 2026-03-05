@@ -763,7 +763,7 @@
             </div>
             <div class="report-title" style="margin-bottom:6px">${r.title}</div>
             <div style="font-size:13px;color:var(--text2);line-height:1.7;white-space:pre-wrap">${r.description}</div>
-            ${r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${r.images.map(u=>`<img src="${u}" style="max-width:120px;max-height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="window.open('${u}','_blank')">`).join('')}</div>` : ''}
+            ${r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${r.images.map((u,idx)=>`<img src="${u}" style="max-width:120px;max-height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="event.stopPropagation();openLightbox(r.images,idx)">`).join('')}</div>` : ''}
             ${r.url ? `<a href="${r.url.startsWith('http')?r.url:'https://'+r.url}" target="_blank" onclick="event.stopPropagation()" style="display:inline-block;margin-top:6px;font-size:13px;color:var(--accent);word-break:break-all">🔗 ${r.url}</a>` : ''}
             <div class="report-time" style="margin-top:8px">${time}</div>
           </div>
@@ -792,7 +792,7 @@
             <div class="report-title">${r.title}</div>
             <div class="report-preview" id="prev-${r.id}">${r.description}</div>
             ${!isAdminMode && r.url ? `<a href="${r.url.startsWith('http')?r.url:'https://'+r.url}" target="_blank" onclick="event.stopPropagation()" style="display:inline-block;margin-top:4px;font-size:13px;color:var(--accent);word-break:break-all">🔗 ${r.url}</a>` : ''}
-            ${!isAdminMode && r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${r.images.map(u=>`<img src="${u}" style="max-width:120px;max-height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="event.stopPropagation();window.open('${u}','_blank')">`).join('')}</div>` : ''}
+            ${!isAdminMode && r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${r.images.map((u,idx)=>`<img src="${u}" style="max-width:120px;max-height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="event.stopPropagation();openLightbox(${JSON.stringify(r.images).replace(/'/g,\'\')},${idx})">`).join('')}</div>` : ''}
           </div>
           <div style="text-align:right;flex-shrink:0">
             <div class="report-time">${time}</div>
@@ -819,7 +819,7 @@
       </div>
       <h4 style="font-size:15px;font-weight:600;margin-bottom:8px">${r.title}</h4>
       <p style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:16px;white-space:pre-wrap">${r.description}</p>
-      ${r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">${r.images.map(u=>`<img src="${u}" style="max-width:100%;max-height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="window.open('${u}','_blank')">`).join('')}</div>` : ''}
+      ${r.images && r.images.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">${r.images.map((u,idx)=>`<img src="${u}" style="max-width:100%;max-height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer" onclick="openLightbox(${JSON.stringify(r.images).replace(/'/g,\'\')},${idx})">`).join('')}</div>` : ''}
       <hr>
       <div style="margin:14px 0">
         <p style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">回報者資訊</p>
