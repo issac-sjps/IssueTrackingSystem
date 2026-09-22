@@ -271,7 +271,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, orderBy, where, Timestamp, serverTimestamp }
+  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, where, Timestamp, serverTimestamp, runTransaction }
     from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
     from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
@@ -291,8 +291,28 @@
   const EMAILJS_SERVICE = "sjps-email", EMAILJS_TEMPLATE = "template_64vfj0r", EMAILJS_KEY = "Afvefa2Td0erGkhPK";
   if (EMAILJS_KEY) window.emailjs.init(EMAILJS_KEY);
 
+  const EMAIL_MONTHLY_LIMIT = 150; // 每月寄信上限，超過就停止寄信（每月 1 號重置）
+
+  // 回傳 true 代表這次可以寄信（並已計數），false 代表本月額度已用完
+  async function reserveEmailQuota() {
+    const monthKey = new Date().toISOString().slice(0,7); // 例如 "2026-09"
+    const counterRef = doc(db, 'meta', 'emailCounter');
+    try {
+      return await runTransaction(db, async (tx) => {
+        const snap = await tx.get(counterRef);
+        const data = snap.exists() ? snap.data() : {};
+        const currentCount = (data.month === monthKey) ? (data.count || 0) : 0;
+        if (currentCount >= EMAIL_MONTHLY_LIMIT) return false;
+        tx.set(counterRef, { month: monthKey, count: currentCount + 1 });
+        return true;
+      });
+    } catch (e) { console.error('額度檢查失敗', e); return false; }
+  }
+
   async function notifyAdminNewReport(data) {
     if (!EMAILJS_SERVICE || !EMAILJS_TEMPLATE || !EMAILJS_KEY) return; // 尚未設定 EmailJS，略過通知
+    const allowed = await reserveEmailQuota();
+    if (!allowed) { console.warn('本月 Email 通知額度已用完（上限 ' + EMAIL_MONTHLY_LIMIT + ' 封），略過寄信'); return; }
     try {
       await window.emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
         to_email: ADMIN_EMAIL,
@@ -744,6 +764,7 @@
           ${r.status==='pending' ? `<button class="btn btn-success" style="flex:1;justify-content:center" onclick="resolveReport('${r.id}')">✅ 標記已解決</button>` : ''}
           <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="saveReply('${r.id}')">💾 ${r.status==='resolved'?'更新回覆':'儲存'}</button>
         </div>
+        <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:8px;color:var(--red);border-color:rgba(248,81,73,.3)" onclick="deleteReport('${r.id}')">🗑️ 永久刪除此回報</button>
       </div>`;
   }
 
@@ -768,6 +789,17 @@
     const reply = document.getElementById('reply-input').value;
     try { await updateDoc(doc(db,'reports',id), { adminReply: reply }); toast('回覆已儲存'); await loadAdmin(); }
     catch { toast('儲存失敗', 'err'); }
+  };
+
+  window.deleteReport = async function(id) {
+    if (!confirm('確定要永久刪除這則回報嗎？此操作無法復原。')) return;
+    try {
+      await deleteDoc(doc(db,'reports',id));
+      toast('已永久刪除');
+      document.getElementById('detail-panel').innerHTML = '<div class="empty" style="padding:40px 0"><div class="empty-icon">👈</div><p style="font-size:13px">點擊左側回報查看詳情</p></div>';
+      selectedId = null;
+      await loadAdmin();
+    } catch(e) { console.error(e); toast('刪除失敗', 'err'); }
   };
 
   window.setAdminTab = function(tab) {};
