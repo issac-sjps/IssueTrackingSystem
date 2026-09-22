@@ -6,6 +6,7 @@
   <title>問題回報系統</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -286,7 +287,25 @@
   const ADMIN_EMAIL = "issac@sjps.kh.edu.tw";
   const CLOUDINARY_CLOUD = "myjournalweb";
   const CLOUDINARY_PRESET = "IssueTrackingSystem";
-  const EMAILJS_SERVICE = "", EMAILJS_TEMPLATE = "", EMAILJS_KEY = "";
+  // 到 emailjs.com 申請後，把 Service ID / Template ID / Public Key 填在這裡
+  const EMAILJS_SERVICE = "sjps-email", EMAILJS_TEMPLATE = "template_64vfj0r", EMAILJS_KEY = "Afvefa2Td0erGkhPK";
+  if (EMAILJS_KEY) window.emailjs.init(EMAILJS_KEY);
+
+  async function notifyAdminNewReport(data) {
+    if (!EMAILJS_SERVICE || !EMAILJS_TEMPLATE || !EMAILJS_KEY) return; // 尚未設定 EmailJS，略過通知
+    try {
+      await window.emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+        to_email: ADMIN_EMAIL,
+        title: data.title,
+        category: data.category,
+        description: data.description,
+        report_url: data.url || '（無）',
+        ip: data.ip,
+        city: data.location?.city || '未知',
+        country: data.location?.country || '未知'
+      });
+    } catch (e) { console.error('Email 通知失敗', e); }
+  }
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
@@ -506,6 +525,7 @@
         status: 'pending', ip, ipv4: ipv4||'', ipv6: ipv6||'', location,
         adminReply: '', resolvedAt: null, createdAt: serverTimestamp()
       });
+      notifyAdminNewReport({ title, description: desc, category: selectedCat, url, ip, location });
       document.getElementById('report-form-wrap').classList.add('hidden');
       document.getElementById('report-done').classList.remove('hidden');
       toast('回報已提交！');
